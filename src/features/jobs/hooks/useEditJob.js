@@ -4,15 +4,16 @@ import { jobsApi } from '../api';
 import { getErrorMessage } from '../../../lib/errorMessages';
 import toast from 'react-hot-toast';
 
-export const useCreateJob = () => {
+export const useEditJob = (jobId) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data) => jobsApi.create({ ...data, jobStatus: 'OPEN' }),
+    mutationFn: (data) => jobsApi.edit(jobId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myJobs'] });
-      toast.success('Job posted successfully!');
+      queryClient.invalidateQueries({ queryKey: ['job', jobId] });
+      toast.success('Job updated');
       navigate('/jobs/my-jobs');
     },
     onError: (error) => toast.error(getErrorMessage(error)),

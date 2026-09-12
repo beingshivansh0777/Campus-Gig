@@ -1,19 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 import { jobsApi } from '../api';
 import { getErrorMessage } from '../../../lib/errorMessages';
 import toast from 'react-hot-toast';
 
-export const useCreateJob = () => {
-  const navigate = useNavigate();
+export const useDeleteDraft = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (data) => jobsApi.create({ ...data, jobStatus: 'OPEN' }),
+    mutationFn: (draftId) => jobsApi.deleteDraft(draftId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myJobs'] });
-      toast.success('Job posted successfully!');
-      navigate('/jobs/my-jobs');
+      queryClient.invalidateQueries({ queryKey: ['jobDrafts'] });
+      toast.success('Draft deleted');
     },
     onError: (error) => toast.error(getErrorMessage(error)),
   });

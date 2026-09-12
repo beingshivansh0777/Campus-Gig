@@ -16,7 +16,7 @@ function ProfilePage() {
   const tabLabels = {
     view: 'Overview',
     edit: 'Edit Details',
-    'become-gig': 'Become a Gig',
+    'become-gig': 'Become a Campus-Gigger',
     'gig-profile': 'My Gig Profile',
   };
 

@@ -14,6 +14,11 @@ import MyProposalsPage from "../pages/MyProposalsPage";
 import MyContractsPage from "../pages/MyContractsPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import VerifyEmailPage from "../pages/VerifyEmailPage";
+import MyJobsPage from "../pages/MyJobsPage";
+import DraftsPage from "../pages/Draftspage";
+import EditDraftPage from "../pages/EditDraftsPage";
+import EditJobPage from "../pages/EditJobPage";
+import ManageJobPage from "../pages/ManageJobPage";
 
 function AppRoutes() {
   return (
@@ -35,6 +40,12 @@ function AppRoutes() {
           <Route path="/jobs/create" element={<CreateJobPage />} />
           <Route path="/proposals" element={<MyProposalsPage />} />
           <Route path="/contracts" element={<MyContractsPage />} />
+          <Route path="/jobs/create" element={<CreateJobPage />} />
+          <Route path="/jobs/my-jobs" element={<MyJobsPage />} />
+          <Route path="/jobs/drafts" element={<DraftsPage />} />
+          <Route path="/jobs/drafts/:draftId" element={<EditDraftPage />} />
+          <Route path="/jobs/edit/:jobId" element={<EditJobPage />} />
+          <Route path="/jobs/manage/:jobId" element={<ManageJobPage />} />
         </Route>
       </Route>
 
