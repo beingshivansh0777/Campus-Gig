@@ -9,14 +9,14 @@ function LoginPage() {
       subtitle="Log in to continue to your dashboard."
       footer={
         <div className="space-y-2 text-center">
-          <p className="text-xs font-body text-muted">
+          <p className="text-xs font-body text-[#8B87A0]">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-primary font-semibold hover:underline">
+            <Link to="/signup" className="text-[#7C3AED] font-semibold hover:underline">
               Sign up
             </Link>
           </p>
-          <p className="text-xs font-body text-muted">
-            <Link to="/forgot-password" className="text-primary font-semibold hover:underline">
+          <p className="text-xs font-body text-[#8B87A0]">
+            <Link to="/forgot-password" className="text-[#7C3AED] font-semibold hover:underline">
               Forgot password?
             </Link>
           </p>

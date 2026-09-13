@@ -25,3 +25,14 @@ export const jobsApi = {
   rejectProposal: (applicationId) =>
     axiosInstance.patch(ENDPOINTS.jobs.rejectProposal, null, { params: { applicationId } }),
 };
+
+export const bookmarksApi = {
+  save: (jobId) => axiosInstance.post(ENDPOINTS.bookmarks.save, null, { params: { jobId } }),
+  remove: (jobId) => axiosInstance.delete(ENDPOINTS.bookmarks.remove, { params: { jobId } }),
+  list: (params) => axiosInstance.get(ENDPOINTS.bookmarks.list, { params }),
+};
+
+
+export const proposalsApi = {
+  apply: (payload) => axiosInstance.post(ENDPOINTS.gig.proposal, payload),
+};

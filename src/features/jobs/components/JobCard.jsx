@@ -1,23 +1,49 @@
 import { Link } from 'react-router-dom';
 import { Clock, BarChart3 } from 'lucide-react';
 import { JOB_STATUS_LABELS } from '../../../lib/constants';
+import SaveJobButton from './SaveButton';
 
 const statusStyles = {
   OPEN: 'bg-success/10 text-success',
-  CLOSED: 'bg-muted/10 text-muted',
-  DRAFT: 'bg-warning/10 text-warning',
+  CLOSED: 'bg-faint/10 text-faint',
+  DRAFT: 'bg-amber/10 text-amber',
   DELETED: 'bg-error/10 text-error',
 };
 
-function JobCard({ job, linkTo }) {
+// Cycle through gradient variants by category so the grid feels varied, not monotone
+const gradientVariants = [
+  'from-[#7C3AED] to-[#A855F7]', // purple
+  'from-[#EC4899] to-[#F472B6]', // pink
+  'from-[#F59E0B] to-[#FBBF24]', // amber
+  'from-[#14B8A6] to-[#2DD4BF]', // teal
+];
+
+function getGradientForCategory(category) {
+  if (!category) return gradientVariants[0];
+  const index = category.length % gradientVariants.length;
+  return gradientVariants[index];
+}
+
+function JobCard({ job, linkTo, showBookmark = false }) {
+  const category = job.category;
+  const gradient = getGradientForCategory(category);
+
   const content = (
-    <div className="bg-surface border border-border rounded-xl p-4 hover:border-ink/20 transition">
+    <div className="bg-surface border border-border rounded-xl p-4 hover:border-primary/30 hover:shadow-sm transition relative">
+      {category && (
+        <span
+          className={`inline-block text-xs font-body font-semibold text-white px-2.5 py-1 rounded-full mb-2.5 bg-linear-to-r ${gradient}`}
+        >
+          {category.replace(/_/g, ' ')}
+        </span>
+      )}
+
       <div className="flex items-start justify-between gap-3">
         <h3 className="font-body font-semibold text-sm text-ink line-clamp-1">{job.title}</h3>
         {job.jobStatus && (
           <span
             className={`text-xs font-body font-medium px-2 py-0.5 rounded-full shrink-0 ${
-              statusStyles[job.jobStatus] || 'bg-muted/10 text-muted'
+              statusStyles[job.jobStatus] || 'bg-faint/10 text-faint'
             }`}
           >
             {JOB_STATUS_LABELS[job.jobStatus] || job.jobStatus}
@@ -29,20 +55,23 @@ function JobCard({ job, linkTo }) {
         <p className="text-sm font-body text-muted mt-1.5 line-clamp-2">{job.description}</p>
       )}
 
-      <div className="flex items-center gap-4 mt-3 text-xs font-body text-muted">
-        <span className="font-mono">₹{job.budget}</span>
-        {job.deadline && (
-          <span className="flex items-center gap-1">
-            <Clock size={12} />
-            {new Date(job.deadline).toLocaleDateString()}
-          </span>
-        )}
-        {job.experience && (
-          <span className="flex items-center gap-1">
-            <BarChart3 size={12} />
-            {job.experience.charAt(0) + job.experience.slice(1).toLowerCase()}
-          </span>
-        )}
+      <div className="flex items-center justify-between mt-3">
+        <div className="flex items-center gap-4 text-xs font-body text-faint">
+          <span className="font-mono text-ink font-semibold">₹{job.budget}</span>
+          {job.deadline && (
+            <span className="flex items-center gap-1">
+              <Clock size={12} />
+              {new Date(job.deadline).toLocaleDateString()}
+            </span>
+          )}
+          {job.experience && (
+            <span className="flex items-center gap-1">
+              <BarChart3 size={12} />
+              {job.experience.charAt(0) + job.experience.slice(1).toLowerCase()}
+            </span>
+          )}
+        </div>
+        {showBookmark && <SaveJobButton jobId={job.id} />}
       </div>
     </div>
   );
