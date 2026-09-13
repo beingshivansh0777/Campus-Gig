@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useJob } from '../features/jobs/hooks/useJob';
-import SaveJobButton from '../features/jobs/components/SaveButton';
-import ApplyModal from '../features/jobs/components/ApplyModal';
-import { useAuthStore } from '../features/auth/authStore';
+import { useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import { useJob } from "../features/jobs/hooks/useJob";
+import SaveJobButton from "../features/jobs/components/SaveJobButton";
+import ApplyModal from "../features/jobs/components/ApplyModal";
+import { useAuthStore } from "../features/auth/authStore";
 
 function JobDetailPage() {
   const { jobId } = useParams();
@@ -20,7 +20,9 @@ function JobDetailPage() {
   if (isError || !job) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-10 text-center">
-        <p className="font-body text-sm text-muted">This project couldn't be found.</p>
+        <p className="font-body text-sm text-muted">
+          This project couldn't be found.
+        </p>
       </div>
     );
   }
@@ -28,11 +30,17 @@ function JobDetailPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
       <div className="flex items-start justify-between gap-4 mb-2">
-        <h1 className="font-display text-2xl font-bold text-ink">{job.title}</h1>
+        <h1 className="font-display text-2xl font-bold text-ink">
+          {job.title}
+        </h1>
         <SaveJobButton jobId={job.id} />
       </div>
       <p className="text-sm font-body text-muted mb-6">
-        {job.category?.replace(/_/g, ' ')} · Posted {new Date(job.publishAt).toLocaleDateString()}
+        Posted by{" "}
+        {[job.clientFirstName, job.clientLastName].filter(Boolean).join(" ") ||
+          "a client"}{" "}
+        · {job.category?.replace(/_/g, " ")} ·{" "}
+        {new Date(job.publishAt).toLocaleDateString()}
       </p>
 
       <div className="bg-surface border border-border rounded-xl p-6 mb-6">
@@ -69,10 +77,13 @@ function JobDetailPage() {
         </button>
       ) : (
         <p className="text-sm font-body text-faint">
-          Only Gigs can submit proposals.{' '}
-          <Link to="/profile" className="text-primary font-semibold hover:underline">
+          Only Gigs can submit proposals.{" "}
+          <Link
+            to="/profile"
+            className="text-primary font-semibold hover:underline"
+          >
             Become a Gig
-          </Link>{' '}
+          </Link>{" "}
           to apply.
         </p>
       )}

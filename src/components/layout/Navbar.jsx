@@ -31,7 +31,7 @@ function Navbar() {
     navigate('/login');
   };
 
-  const primaryLinks = isGig
+ const primaryLinks = isGig
   ? [
       { to: '/jobs', label: 'Find Work' },
       { to: '/proposals', label: 'My Proposals' },
@@ -40,7 +40,8 @@ function Navbar() {
     ]
   : [
       { to: '/jobs/create', label: 'Post a Project' },
-      { to: '/jobs/my-jobs', label: 'My Projects' },
+      { to: '/jobs/my-jobs', label: 'My Jobs' },
+      { to: '/proposals-received', label: 'Proposals' },
     ];
 
 const secondaryLinks = isGig ? [] : [{ to: '/contracts', label: 'Contracts' }];

@@ -21,6 +21,7 @@ import EditJobPage from "../pages/EditJobPage";
 import ManageJobPage from "../pages/ManageJobPage";
 import JobDetailPage from "../pages/JobDetailPage";
 import SavedJobsPage from "../pages/SavedJobsPage";
+import ReceivedProposalsPage from '../pages/ReceivedProposalsPage';
 
 function AppRoutes() {
   return (
@@ -50,6 +51,7 @@ function AppRoutes() {
           <Route path="/jobs/manage/:jobId" element={<ManageJobPage />} />
           <Route path="/jobs/:jobId" element={<JobDetailPage />} />
           <Route path="/saved-jobs" element={<SavedJobsPage />} />
+          <Route path="/proposals-received" element={<ReceivedProposalsPage />} />
         </Route>
       </Route>
 

@@ -1,7 +1,8 @@
+// src/features/jobs/components/JobCard.jsx
 import { Link } from 'react-router-dom';
 import { Clock, BarChart3 } from 'lucide-react';
 import { JOB_STATUS_LABELS } from '../../../lib/constants';
-import SaveJobButton from './SaveButton';
+import SaveJobButton from './SaveJobButton';
 
 const statusStyles = {
   OPEN: 'bg-success/10 text-success',
@@ -10,12 +11,11 @@ const statusStyles = {
   DELETED: 'bg-error/10 text-error',
 };
 
-// Cycle through gradient variants by category so the grid feels varied, not monotone
 const gradientVariants = [
-  'from-[#7C3AED] to-[#A855F7]', // purple
-  'from-[#EC4899] to-[#F472B6]', // pink
-  'from-[#F59E0B] to-[#FBBF24]', // amber
-  'from-[#14B8A6] to-[#2DD4BF]', // teal
+  'from-[#7C3AED] to-[#A855F7]',
+  'from-[#EC4899] to-[#F472B6]',
+  'from-[#F59E0B] to-[#FBBF24]',
+  'from-[#14B8A6] to-[#2DD4BF]',
 ];
 
 function getGradientForCategory(category) {
@@ -27,9 +27,19 @@ function getGradientForCategory(category) {
 function JobCard({ job, linkTo, showBookmark = false }) {
   const category = job.category;
   const gradient = getGradientForCategory(category);
+  const posterName = [job.clientFirstName, job.clientLastName].filter(Boolean).join(' ');
 
   const content = (
     <div className="bg-surface border border-border rounded-xl p-4 hover:border-primary/30 hover:shadow-sm transition relative">
+      {posterName && (
+        <div className="flex items-center gap-2 mb-3">
+          <span className="w-6 h-6 rounded-full bg-linear-to-br from-[#7C3AED] to-[#EC4899] text-white flex items-center justify-center text-xs font-semibold shrink-0">
+            {job.clientFirstName?.[0] || 'U'}
+          </span>
+          <span className="text-xs font-body text-muted">{posterName}</span>
+        </div>
+      )}
+
       {category && (
         <span
           className={`inline-block text-xs font-body font-semibold text-white px-2.5 py-1 rounded-full mb-2.5 bg-linear-to-r ${gradient}`}
