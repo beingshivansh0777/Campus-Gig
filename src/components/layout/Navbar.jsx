@@ -40,7 +40,7 @@ function Navbar() {
     ]
   : [
       { to: '/jobs/create', label: 'Post a Project' },
-      { to: '/jobs/my-jobs', label: 'My Jobs' },
+      { to: '/jobs/my-jobs', label: 'My Projects' },
     ];
 
 const secondaryLinks = isGig ? [] : [{ to: '/contracts', label: 'Contracts' }];

@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useJob } from '../features/jobs/hooks/useJob';
 import SaveJobButton from '../features/jobs/components/SaveButton';
+import ApplyModal from '../features/jobs/components/ApplyModal';
 import { useAuthStore } from '../features/auth/authStore';
 
 function JobDetailPage() {
   const { jobId } = useParams();
   const { data: job, isLoading, isError } = useJob(jobId);
   const isGig = useAuthStore((state) => state.isGig);
+  const [showApplyModal, setShowApplyModal] = useState(false);
 
   if (isLoading) {
     return (
@@ -58,7 +61,10 @@ function JobDetailPage() {
       </div>
 
       {isGig ? (
-        <button className="bg-linear-to-r from-[#7C3AED] to-[#EC4899] text-white font-body font-semibold text-sm px-6 py-3 rounded-lg hover:opacity-90 transition">
+        <button
+          onClick={() => setShowApplyModal(true)}
+          className="bg-linear-to-r from-[#7C3AED] to-[#EC4899] text-white font-body font-semibold text-sm px-6 py-3 rounded-lg hover:opacity-90 transition"
+        >
           Submit a Proposal
         </button>
       ) : (
@@ -69,6 +75,10 @@ function JobDetailPage() {
           </Link>{' '}
           to apply.
         </p>
+      )}
+
+      {showApplyModal && (
+        <ApplyModal jobId={jobId} onClose={() => setShowApplyModal(false)} />
       )}
     </div>
   );

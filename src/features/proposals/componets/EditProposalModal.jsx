@@ -2,22 +2,30 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from 'lucide-react';
 import { proposalSchema } from '../../../lib/validators/proposalSchemas';
-import { useApplyToJob } from '../hooks/useApplyToJob';
+import { useUpdateProposal } from '../hooks/useUpdateProposal';
 
 const fieldClass =
   'w-full border border-border bg-surface rounded-lg px-3 py-2.5 font-body text-sm text-ink placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition';
 
-function ApplyModal({ jobId, onClose }) {
-  const applyToJob = useApplyToJob();
+function EditProposalModal({ proposal, onClose }) {
+  const updateProposal = useUpdateProposal();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(proposalSchema), mode: 'onBlur' });
+  } = useForm({
+    resolver: zodResolver(proposalSchema),
+    mode: 'onBlur',
+    defaultValues: {
+      coverLetter: proposal.coverLetter,
+      bidAmount: proposal.budget,
+      deliveryDate: proposal.deliveryDate,
+    },
+  });
 
   const onSubmit = (data) => {
-    applyToJob.mutate(
-      { ...data, jobId: Number(jobId) },
+    updateProposal.mutate(
+      { jobApplicationId: proposal.id, payload: data },
       { onSuccess: onClose }
     );
   };
@@ -33,22 +41,14 @@ function ApplyModal({ jobId, onClose }) {
           <X size={18} />
         </button>
 
-        <h2 className="font-display text-xl font-bold text-ink mb-1">Submit a Proposal</h2>
-        <p className="text-sm font-body text-muted mb-5">
-          Tell the client why you're the right person for this project.
-        </p>
+        <h2 className="font-display text-xl font-bold text-ink mb-5">Edit Proposal</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-xs font-body font-medium text-ink mb-1.5">
               Cover Letter
             </label>
-            <textarea
-              {...register('coverLetter')}
-              rows={5}
-              placeholder="Explain your relevant experience and how you'd approach this project..."
-              className={fieldClass}
-            />
+            <textarea {...register('coverLetter')} rows={5} className={fieldClass} />
             {errors.coverLetter && (
               <p className="text-error text-xs mt-1.5">{errors.coverLetter.message}</p>
             )}
@@ -59,12 +59,7 @@ function ApplyModal({ jobId, onClose }) {
               <label className="block text-xs font-body font-medium text-ink mb-1.5">
                 Your Bid (₹)
               </label>
-              <input
-                type="number"
-                {...register('bidAmount')}
-                placeholder="e.g. 4500"
-                className={fieldClass}
-              />
+              <input type="number" {...register('bidAmount')} className={fieldClass} />
               {errors.bidAmount && (
                 <p className="text-error text-xs mt-1.5">{errors.bidAmount.message}</p>
               )}
@@ -83,10 +78,10 @@ function ApplyModal({ jobId, onClose }) {
           <div className="flex items-center gap-3 pt-2">
             <button
               type="submit"
-              disabled={applyToJob.isPending}
-              className="flex-1 bg-linear-to-r from-[#7C3AED] to-[#EC4899] text-white font-body font-semibold text-sm py-2.5 rounded-lg hover:opacity-90 disabled:opacity-50 transition"
+              disabled={updateProposal.isPending}
+              className="flex-1 bg-primary text-white font-body font-semibold text-sm py-2.5 rounded-lg hover:bg-primary-hover disabled:opacity-50 transition"
             >
-              {applyToJob.isPending ? 'Submitting...' : 'Submit Proposal'}
+              {updateProposal.isPending ? 'Saving...' : 'Save Changes'}
             </button>
             <button
               type="button"
@@ -102,4 +97,4 @@ function ApplyModal({ jobId, onClose }) {
   );
 }
 
-export default ApplyModal;
+export default EditProposalModal;

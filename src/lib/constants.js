@@ -23,3 +23,5 @@ export const APPLICATION_STATUS_LABELS = {
   ACCEPTED: 'Accepted',
   WITHDRAWN: 'Withdrawn',
 };
+
+export const PROPOSAL_STATUS_TABS = ['APPLIED', 'SHORTLISTED', 'ACCEPTED', 'REJECTED', 'WITHDRAWN'];
