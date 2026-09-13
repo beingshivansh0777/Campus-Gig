@@ -27,3 +27,15 @@ export const useRejectProposal = (jobId) => {
     onError: (error) => toast.error(getErrorMessage(error)),
   });
 };
+
+export const useShortlistProposal = (jobId) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (applicationId) => jobsApi.shortlistProposal(applicationId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['jobApplicants', jobId] });
+      toast.success('Proposal shortlisted');
+    },
+    onError: (error) => toast.error(getErrorMessage(error)),
+  });
+};

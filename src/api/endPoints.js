@@ -29,6 +29,7 @@ export const ENDPOINTS = {
     applicants: (jobId) => `/job/applicants/${jobId}`,
     acceptProposal: '/job/accept-proposal',
     rejectProposal: '/job/reject-proposal',
+    shortlistProposal: '/job/shortlist-proposal',
     withdrawProposalByJobId: (jobId) => `/job/withdraw-proposal/${jobId}`,
   },
   contracts: {

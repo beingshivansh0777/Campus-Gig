@@ -24,6 +24,8 @@ export const jobsApi = {
     axiosInstance.patch(ENDPOINTS.jobs.acceptProposal, null, { params: { jobId, applicationId } }),
   rejectProposal: (applicationId) =>
     axiosInstance.patch(ENDPOINTS.jobs.rejectProposal, null, { params: { applicationId } }),
+  shortlistProposal: (applicationId) =>
+  axiosInstance.patch(ENDPOINTS.jobs.shortlistProposal, null, { params: { applicationId } }),
 };
 
 export const bookmarksApi = {
