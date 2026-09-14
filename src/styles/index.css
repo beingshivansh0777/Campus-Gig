@@ -1,25 +1,25 @@
 @import "tailwindcss";
 
 @theme {
-  /* Neutral surfaces */
-  --color-background: #FAFAFA;
+  --color-background: #FEFCFB;
   --color-surface: #FFFFFF;
-  --color-border: #E5E5E5;
+  --color-border: #EDE9F5;
 
-  /* Text */
-  --color-ink: #1A1A1A;
-  --color-muted: #6B7280;
+  --color-ink: #211A2E;
+  --color-muted: #5B5470;
+  --color-faint: #8B87A0;
 
-  /* Single brand accent */
-  --color-primary: #2952E3;
-  --color-primary-hover: #2340BD;
+  --color-primary: #7C3AED;
+  --color-primary-hover: #6D28D9;
+  --color-accent-pink: #EC4899;
+  --color-amber: #F59E0B;
+  --color-teal: #14B8A6;
 
-  /* Status colors — used sparingly, not as loud badges */
   --color-success: #15803D;
   --color-warning: #B45309;
   --color-error: #DC2626;
 
-  --font-display: "Inter", sans-serif;
-  --font-body: "Inter", sans-serif;
+  --font-display: "Forum", serif;
+  --font-body: "Inter", serif;
   --font-mono: "JetBrains Mono", monospace;
 }
