@@ -11,7 +11,6 @@ import ProfilePage from "../pages/ProfilePage";
 import JobListingPage from "../pages/JobListingPage";
 import CreateJobPage from "../pages/CreateJobPage";
 import MyProposalsPage from "../pages/MyProposalsPage";
-import MyContractsPage from "../pages/MyContractsPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import VerifyEmailPage from "../pages/VerifyEmailPage";
 import MyJobsPage from "../pages/MyJobsPage";
@@ -21,7 +20,9 @@ import EditJobPage from "../pages/EditJobPage";
 import ManageJobPage from "../pages/ManageJobPage";
 import JobDetailPage from "../pages/JobDetailPage";
 import SavedJobsPage from "../pages/SavedJobsPage";
-import ReceivedProposalsPage from '../pages/ReceivedProposalsPage';
+import ReceivedProposalsPage from "../pages/ReceivedProposalsPage";
+import MyContractsPage from "../pages/MyContractsPage";
+import ContractDetailPage from "../pages/ContractDetailPage";
 
 function AppRoutes() {
   return (
@@ -51,7 +52,15 @@ function AppRoutes() {
           <Route path="/jobs/manage/:jobId" element={<ManageJobPage />} />
           <Route path="/jobs/:jobId" element={<JobDetailPage />} />
           <Route path="/saved-jobs" element={<SavedJobsPage />} />
-          <Route path="/proposals-received" element={<ReceivedProposalsPage />} />
+          <Route
+            path="/proposals-received"
+            element={<ReceivedProposalsPage />}
+          />
+          <Route path="/contracts" element={<MyContractsPage />} />
+          <Route
+            path="/contracts/:contractId"
+            element={<ContractDetailPage />}
+          />
         </Route>
       </Route>
 

@@ -68,7 +68,12 @@ function JobDetailPage() {
         </div>
       </div>
 
-      {isGig ? (
+      {job.jobStatus !== "OPEN" ? (
+        <p className="text-sm font-body text-faint bg-surface border border-border rounded-lg px-4 py-3 inline-block">
+          This job is {job.jobStatus?.toLowerCase()} and no longer accepting
+          proposals.
+        </p>
+      ) : isGig ? (
         <button
           onClick={() => setShowApplyModal(true)}
           className="bg-linear-to-r from-[#7C3AED] to-[#EC4899] text-white font-body font-semibold text-sm px-6 py-3 rounded-lg hover:opacity-90 transition"
@@ -87,7 +92,6 @@ function JobDetailPage() {
           to apply.
         </p>
       )}
-
       {showApplyModal && (
         <ApplyModal jobId={jobId} onClose={() => setShowApplyModal(false)} />
       )}

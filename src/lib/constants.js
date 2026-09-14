@@ -25,3 +25,19 @@ export const APPLICATION_STATUS_LABELS = {
 };
 
 export const PROPOSAL_STATUS_TABS = ['APPLIED', 'SHORTLISTED', 'ACCEPTED', 'REJECTED', 'WITHDRAWN'];
+
+export const CONTRACT_STATUS_LABELS = {
+  PENDING: 'Pending',
+  ACTIVE: 'Active',
+  COMPLETE: 'Complete',
+  CANCEL: 'Cancelled',
+  WITHDRAWN: 'Withdrawn',
+};
+
+export const PROGRESS_STATUS_LABELS = {
+  NOT_STARTED: 'Not Started',
+  IN_PROGRESS: 'In Progress',
+  COMPLETED: 'Completed',
+};
+
+export const PROGRESS_ORDER = ['NOT_STARTED', 'IN_PROGRESS', 'COMPLETED'];
