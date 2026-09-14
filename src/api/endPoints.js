@@ -14,6 +14,7 @@ export const ENDPOINTS = {
     addSkills: "/gig/add-skills",
     proposal: "/gig/proposal", // POST to apply
     proposals: "/gig/proposals", // POST (filter/list) — fixed from GET
+    gigById: (gigId) => `/gig/${gigId}`,
     proposalById: (id) => `/gig/proposal/${id}`, // PATCH update
     withdrawProposal: (id) => `/gig/withdraw-proposal/${id}`,
   },

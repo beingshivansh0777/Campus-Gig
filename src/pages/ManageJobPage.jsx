@@ -125,10 +125,13 @@ function ManageJobPage() {
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
-                  <p className="font-body font-semibold text-sm text-ink">
+                  <Link
+                    to={`/gigs/${applicant.gigResponseDTO?.id}`}
+                    className="font-body font-semibold text-sm text-ink hover:text-primary transition"
+                  >
                     {applicant.gigResponseDTO?.gigFirstName}{" "}
                     {applicant.gigResponseDTO?.gigLastName}
-                  </p>
+                  </Link>
                   <p className="text-xs font-body text-muted mt-0.5">
                     {applicant.gigResponseDTO?.title} ·{" "}
                     {applicant.gigResponseDTO?.college}
