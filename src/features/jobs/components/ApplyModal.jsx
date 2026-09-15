@@ -84,7 +84,7 @@ function ApplyModal({ jobId, onClose }) {
             <button
               type="submit"
               disabled={applyToJob.isPending}
-              className="flex-1 bg-linear-to-r from-[#7C3AED] to-[#EC4899] text-white font-body font-semibold text-sm py-2.5 rounded-lg hover:opacity-90 disabled:opacity-50 transition"
+              className="flex-1 bg-linear-to-r from-primary to-accent-pink text-white font-body font-semibold text-sm py-2.5 rounded-lg hover:opacity-90 disabled:opacity-50 transition"
             >
               {applyToJob.isPending ? 'Submitting...' : 'Submit Proposal'}
             </button>

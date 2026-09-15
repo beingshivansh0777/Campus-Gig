@@ -72,7 +72,7 @@ function JobDetailPage() {
             alert("clicked");
             setShowApplyModal(true);
           }}
-          className="bg-linear-to-r from-[#7C3AED] to-[#EC4899] text-white font-body font-semibold text-sm px-6 py-3 rounded-lg hover:opacity-90 transition"
+          className="bg-linear-to-r from-primary to-accent-pink text-white font-body font-semibold text-sm px-6 py-3 rounded-lg hover:opacity-90 transition"
         >
           Submit a Proposal
         </button>

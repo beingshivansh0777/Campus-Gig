@@ -119,7 +119,7 @@ function HomePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-body font-semibold tracking-wider text-white uppercase bg-linear-to-r from-[#7C3AED] to-[#EC4899] px-3 py-1 rounded-full mb-5">
+          <span className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-body font-semibold tracking-wider text-white uppercase bg-linear-to-r from-primary to-accent-pink px-3 py-1 rounded-full mb-5">
             <span className="relative flex h-1.5 w-1.5 shrink-0">
               <span className="absolute inline-flex h-full w-full rounded-full bg-white opacity-75 animate-ping" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white" />
@@ -127,7 +127,7 @@ function HomePage() {
             Built for students, by students
           </span>
 
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-[#211A2E] leading-[1.1] sm:leading-[1.05] tracking-tight mb-5 wrap-break-word">
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-ink leading-[1.1] sm:leading-[1.05] tracking-tight mb-5 wrap-break-word">
             <span className="block">Find campus</span>
             <span className="block relative h-[1.1em] sm:h-[1.05em] overflow-hidden">
               <AnimatePresence mode="wait">
@@ -137,7 +137,7 @@ function HomePage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -24 }}
                   transition={{ duration: 0.35, ease: 'easeOut' }}
-                  className="absolute inset-0 bg-linear-to-r from-[#7C3AED] to-[#EC4899] bg-clip-text text-transparent"
+                  className="absolute inset-0 bg-linear-to-r from-primary to-accent-pink bg-clip-text text-transparent"
                 >
                   {rotatingWords[wordIndex]}
                 </motion.span>
@@ -146,7 +146,7 @@ function HomePage() {
             Get work done.
           </h1>
 
-          <p className="font-body text-base sm:text-lg text-[#5B5470] max-w-md mb-8 leading-relaxed">
+          <p className="font-body text-base sm:text-lg text-muted max-w-md mb-8 leading-relaxed">
             Post a project, receive proposals from skilled students, compare bids and hire with
             confidence — all within your campus.
           </p>
@@ -154,7 +154,7 @@ function HomePage() {
           <div className="flex flex-wrap items-center gap-3">
             <Link
               to={token ? '/jobs/create' : '/signup'}
-              className="group flex items-center gap-2 text-white font-body font-semibold text-sm px-5 sm:px-6 py-3 rounded-lg bg-linear-to-r from-[#7C3AED] to-[#EC4899] hover:shadow-lg hover:shadow-[#EC4899]/25 hover:scale-[1.03] active:scale-[0.98] transition-all"
+              className="group flex items-center gap-2 text-white font-body font-semibold text-sm px-5 sm:px-6 py-3 rounded-lg bg-linear-to-r from-primary to-accent-pink hover:shadow-lg hover:shadow-accent-pink hover:scale-[1.03] active:scale-[0.98] transition-all"
             >
               <Briefcase size={16} />
               Post a Project
@@ -162,7 +162,7 @@ function HomePage() {
             </Link>
             <Link
               to={token ? '/jobs' : '/signup'}
-              className="bg-white text-[#211A2E] font-body font-semibold text-sm px-5 sm:px-6 py-3 rounded-lg border border-[#EDE9F5] hover:border-[#7C3AED]/40 hover:text-[#7C3AED] transition-colors"
+              className="bg-white text-ink font-body font-semibold text-sm px-5 sm:px-6 py-3 rounded-lg border border-border hover:border-primary/40 hover:text-primary transition-colors"
             >
               Browse Talent
             </Link>
@@ -188,7 +188,7 @@ function HomePage() {
               >
                 <Link
                   to={token ? '/jobs' : '/signup'}
-                  className="bg-white border border-[#EDE9F5] rounded-xl p-4 flex items-center gap-4 shadow-sm hover:shadow-lg hover:border-[#7C3AED]/30 transition-shadow"
+                  className="bg-white border border-border rounded-xl p-4 flex items-center gap-4 shadow-sm hover:shadow-lg hover:border-primary/30 transition-shadow"
                 >
                   <div
                     className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${card.tint}`}
@@ -196,12 +196,12 @@ function HomePage() {
                     <card.icon size={18} />
                   </div>
                   <div className="min-w-0">
-                    <p className="font-body font-semibold text-sm text-[#211A2E] truncate">
+                    <p className="font-body font-semibold text-sm text-ink truncate">
                       {card.title}
                     </p>
                     <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-xs font-mono text-[#5B5470]">{card.budget}</span>
-                      <span className="text-xs font-body text-[#D9D2EC]">·</span>
+                      <span className="text-xs font-mono text-muted">{card.budget}</span>
+                      <span className="text-xs font-body text-faint">·</span>
                       <span
                         className={`text-xs font-body font-medium bg-linear-to-r ${card.accent} bg-clip-text text-transparent`}
                       >
@@ -230,7 +230,7 @@ function HomePage() {
               >
                 <Link
                   to={token ? '/jobs' : '/signup'}
-                  className="bg-white border border-[#EDE9F5] rounded-xl p-4 flex items-center gap-4 shadow-sm active:scale-[0.98] transition-transform h-full"
+                  className="bg-white border border-border rounded-xl p-4 flex items-center gap-4 shadow-sm active:scale-[0.98] transition-transform h-full"
                 >
                   <div
                     className={`w-11 h-11 rounded-lg flex items-center justify-center shrink-0 ${previewCards[mobileCardIndex].tint}`}
@@ -241,14 +241,14 @@ function HomePage() {
                     })()}
                   </div>
                   <div className="min-w-0">
-                    <p className="font-body font-semibold text-sm text-[#211A2E] truncate">
+                    <p className="font-body font-semibold text-sm text-ink truncate">
                       {previewCards[mobileCardIndex].title}
                     </p>
                     <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-xs font-mono text-[#5B5470]">
+                      <span className="text-xs font-mono text-muted">
                         {previewCards[mobileCardIndex].budget}
                       </span>
-                      <span className="text-xs font-body text-[#D9D2EC]">·</span>
+                      <span className="text-xs font-body text-faint">·</span>
                       <span
                         className={`text-xs font-body font-medium bg-linear-to-r ${previewCards[mobileCardIndex].accent} bg-clip-text text-transparent`}
                       >
@@ -266,7 +266,7 @@ function HomePage() {
               <span
                 key={card.title}
                 className={`h-1.5 rounded-full transition-all ${
-                  i === mobileCardIndex ? 'w-4 bg-[#7C3AED]' : 'w-1.5 bg-[#EDE9F5]'
+                  i === mobileCardIndex ? 'w-4 bg-primary' : 'w-1.5 bg-border'
                 }`}
               />
             ))}
@@ -283,17 +283,17 @@ function HomePage() {
           transition={{ duration: 0.5 }}
           className="text-center mb-10 sm:mb-14"
         >
-          <span className="text-xs font-body font-semibold tracking-wider text-[#7C3AED] uppercase">
+          <span className="text-xs font-body font-semibold tracking-wider text-primary uppercase">
             How it works
           </span>
-          <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#211A2E] mt-2">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink mt-2">
             Five steps. Zero hassle.
           </h2>
         </motion.div>
 
         <div className="relative grid grid-cols-2 sm:grid-cols-5 gap-x-4 gap-y-8">
           {/* Connecting line — desktop only */}
-          <div className="hidden sm:block absolute top-6 left-[10%] right-[10%] h-0.5 bg-linear-to-r from-[#7C3AED] via-[#EC4899] to-[#14B8A6] opacity-20" />
+          <div className="hidden sm:block absolute top-6 left-[10%] right-[10%] h-0.5 bg-linear-to-r from-primary via-accent-pink to-teal opacity-20" />
 
           {howItWorks.map((step, i) => (
             <motion.div
@@ -305,14 +305,14 @@ function HomePage() {
               whileHover={{ y: -3 }}
               className="relative flex flex-col items-center text-center"
             >
-              <div className="relative z-10 w-12 h-12 rounded-full bg-white border-2 border-[#7C3AED]/20 flex items-center justify-center mb-3 shadow-sm">
-                <step.icon size={18} className="text-[#7C3AED]" />
-                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-linear-to-br from-[#7C3AED] to-[#EC4899] text-white text-[10px] font-bold flex items-center justify-center">
+              <div className="relative z-10 w-12 h-12 rounded-full bg-white border-2 border-primary/20 flex items-center justify-center mb-3 shadow-sm">
+                <step.icon size={18} className="text-primary" />
+                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-linear-to-br from-primary to-accent-pink text-white text-[10px] font-bold flex items-center justify-center">
                   {i + 1}
                 </span>
               </div>
-              <p className="font-body font-semibold text-sm text-[#211A2E]">{step.title}</p>
-              <p className="text-xs font-body text-[#8B87A0] mt-1 leading-snug max-w-36">
+              <p className="font-body font-semibold text-sm text-ink">{step.title}</p>
+              <p className="text-xs font-body text-muted mt-1 leading-snug max-w-36">
                 {step.desc}
               </p>
             </motion.div>
@@ -321,8 +321,8 @@ function HomePage() {
       </div>
 
       {/* Stats strip — always horizontal, sizes shrink on small screens */}
-      <div className="border-t border-[#EDE9F5] bg-white">
-        <div className="max-w-6xl mx-auto px-2 sm:px-6 py-6 sm:py-10 grid grid-cols-3 divide-x divide-[#EDE9F5]">
+      <div className="border-t border-border bg-white">
+        <div className="max-w-6xl mx-auto px-2 sm:px-6 py-6 sm:py-10 grid grid-cols-3 divide-x divide-border">
           {stats.map((stat) => (
             <motion.div
               key={stat.label}
@@ -334,7 +334,7 @@ function HomePage() {
               >
                 {stat.label}
               </p>
-              <p className="text-[10px] sm:text-sm font-body text-[#8B87A0] mt-1 leading-tight">
+              <p className="text-[10px] sm:text-sm font-body text-muted mt-1 leading-tight">
                 {stat.caption}
               </p>
             </motion.div>

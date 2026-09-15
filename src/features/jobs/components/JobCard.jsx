@@ -12,7 +12,7 @@ const statusStyles = {
 };
 
 const gradientVariants = [
-  'from-[#7C3AED] to-[#A855F7]',
+  'from-primary to-accent-pink',
   'from-[#EC4899] to-[#F472B6]',
   'from-[#F59E0B] to-[#FBBF24]',
   'from-[#14B8A6] to-[#2DD4BF]',
@@ -33,7 +33,7 @@ function JobCard({ job, linkTo, showBookmark = false }) {
     <div className="bg-surface border border-border rounded-xl p-4 hover:border-primary/30 hover:shadow-sm transition relative">
       {posterName && (
         <div className="flex items-center gap-2 mb-3">
-          <span className="w-6 h-6 rounded-full bg-linear-to-br from-[#7C3AED] to-[#EC4899] text-white flex items-center justify-center text-xs font-semibold shrink-0">
+          <span className="w-6 h-6 rounded-full bg-linear-to-br from-primary to-accent-pink text-white flex items-center justify-center text-xs font-semibold shrink-0">
             {job.clientFirstName?.[0] || 'U'}
           </span>
           <span className="text-xs font-body text-muted">{posterName}</span>

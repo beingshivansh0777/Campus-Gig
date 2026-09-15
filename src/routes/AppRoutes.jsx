@@ -23,7 +23,7 @@ import SavedJobsPage from "../pages/SavedJobsPage";
 import ReceivedProposalsPage from "../pages/ReceivedProposalsPage";
 import MyContractsPage from "../pages/MyContractsPage";
 import ContractDetailPage from "../pages/ContractDetailPage";
-import GigProfileViewPage from '../pages/GigProfileViewPage';
+import GigProfileViewPage from "../pages/GigProfileViewPage";
 
 function AppRoutes() {
   return (
@@ -62,8 +62,8 @@ function AppRoutes() {
             path="/contracts/:contractId"
             element={<ContractDetailPage />}
           />
+          <Route path="/gigs/:gigId" element={<GigProfileViewPage />} />
         </Route>
-        <Route path="/gigs/:gigId" element={<GigProfileViewPage />} />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />

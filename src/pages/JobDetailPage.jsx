@@ -1,15 +1,35 @@
-import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { useJob } from "../features/jobs/hooks/useJob";
-import SaveJobButton from "../features/jobs/components/SaveJobButton";
-import ApplyModal from "../features/jobs/components/ApplyModal";
-import { useAuthStore } from "../features/auth/authStore";
+// src/pages/JobDetailPage.jsx
+import { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { useJob } from '../features/jobs/hooks/useJob';
+import SaveJobButton from '../features/jobs/components/SaveJobButton';
+import ApplyModal from '../features/jobs/components/ApplyModal';
+import { useAuthStore } from '../features/auth/authStore';
+import { useMyProposals } from '../features/proposals/hooks/useMyProposals';
 
 function JobDetailPage() {
   const { jobId } = useParams();
   const { data: job, isLoading, isError } = useJob(jobId);
   const isGig = useAuthStore((state) => state.isGig);
   const [showApplyModal, setShowApplyModal] = useState(false);
+
+  // Check this Gig's proposals across every status that means "already
+  // has an active/past proposal on this job" — everything except
+  // WITHDRAWN, since withdrawing should let them apply again.
+  const { data: appliedProposals } = useMyProposals('APPLIED');
+  const { data: shortlistedProposals } = useMyProposals('SHORTLISTED');
+  const { data: acceptedProposals } = useMyProposals('ACCEPTED');
+  const { data: rejectedProposals } = useMyProposals('REJECTED');
+
+  const allNonWithdrawnProposals = [
+    ...(appliedProposals ?? []),
+    ...(shortlistedProposals ?? []),
+    ...(acceptedProposals ?? []),
+    ...(rejectedProposals ?? []),
+  ];
+
+  const alreadyApplied =
+    isGig && allNonWithdrawnProposals.some((p) => p.jobId === Number(jobId));
 
   if (isLoading) {
     return (
@@ -20,9 +40,7 @@ function JobDetailPage() {
   if (isError || !job) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-10 text-center">
-        <p className="font-body text-sm text-muted">
-          This project couldn't be found.
-        </p>
+        <p className="font-body text-sm text-muted">This project couldn't be found.</p>
       </div>
     );
   }
@@ -30,17 +48,12 @@ function JobDetailPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
       <div className="flex items-start justify-between gap-4 mb-2">
-        <h1 className="font-display text-2xl font-bold text-ink">
-          {job.title}
-        </h1>
+        <h1 className="font-display text-2xl font-bold text-ink">{job.title}</h1>
         <SaveJobButton jobId={job.id} />
       </div>
       <p className="text-sm font-body text-muted mb-6">
-        Posted by{" "}
-        {[job.clientFirstName, job.clientLastName].filter(Boolean).join(" ") ||
-          "a client"}{" "}
-        · {job.category?.replace(/_/g, " ")} ·{" "}
-        {new Date(job.publishAt).toLocaleDateString()}
+        Posted by {[job.clientFirstName, job.clientLastName].filter(Boolean).join(' ') || 'a client'} ·{' '}
+        {job.category?.replace(/_/g, ' ')} · {new Date(job.publishAt).toLocaleDateString()}
       </p>
 
       <div className="bg-surface border border-border rounded-xl p-6 mb-6">
@@ -68,30 +81,34 @@ function JobDetailPage() {
         </div>
       </div>
 
-      {job.jobStatus !== "OPEN" ? (
+      {job.jobStatus !== 'OPEN' ? (
         <p className="text-sm font-body text-faint bg-surface border border-border rounded-lg px-4 py-3 inline-block">
-          This job is {job.jobStatus?.toLowerCase()} and no longer accepting
-          proposals.
+          This job is {job.jobStatus?.toLowerCase()} and no longer accepting proposals.
+        </p>
+      ) : alreadyApplied ? (
+        <p className="text-sm font-body text-muted bg-primary/5 border border-primary/20 rounded-lg px-4 py-3 inline-block">
+          You already submitted a proposal for this job.{' '}
+          <Link to="/proposals" className="text-primary font-semibold hover:underline">
+            View your Proposals 
+          </Link>
         </p>
       ) : isGig ? (
         <button
           onClick={() => setShowApplyModal(true)}
-          className="bg-linear-to-r from-[#7C3AED] to-[#EC4899] text-white font-body font-semibold text-sm px-6 py-3 rounded-lg hover:opacity-90 transition"
+          className="bg-linear-to-r from-primary to-accent-pink text-white font-body font-semibold text-sm px-6 py-3 rounded-lg hover:opacity-90 transition"
         >
           Submit a Proposal
         </button>
       ) : (
         <p className="text-sm font-body text-faint">
-          Only Gigs can submit proposals.{" "}
-          <Link
-            to="/profile"
-            className="text-primary font-semibold hover:underline"
-          >
+          Only Gigs can submit proposals.{' '}
+          <Link to="/profile" className="text-primary font-semibold hover:underline">
             Become a Gig
-          </Link>{" "}
+          </Link>{' '}
           to apply.
         </p>
       )}
+
       {showApplyModal && (
         <ApplyModal jobId={jobId} onClose={() => setShowApplyModal(false)} />
       )}

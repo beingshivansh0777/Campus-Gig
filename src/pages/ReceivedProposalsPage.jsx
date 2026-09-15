@@ -8,7 +8,7 @@ function ReceivedProposalsPage() {
     <div className="max-w-4xl mx-auto px-4 py-10">
       <h1 className="font-display text-2xl font-bold text-ink mb-1">Proposals Received</h1>
       <p className="font-body text-sm text-muted mb-6">
-        All proposals submitted across your posted projects.
+        All new proposals submitted across your posted projects.
       </p>
 
       {isLoading ? (

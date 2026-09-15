@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, UserCircle2 } from "lucide-react";
 import { useJob } from "../features/jobs/hooks/useJob";
 import { useDeleteJob } from "../features/jobs/hooks/useDeleteJob";
 import { useApplicants } from "../features/jobs/hooks/useApplicants";
@@ -10,6 +10,7 @@ import {
   useShortlistProposal,
 } from "../features/jobs/hooks/useProposalActions";
 import { APPLICATION_STATUS_LABELS } from "../lib/constants";
+import ApplicantActionsMenu from "../features/jobs/components/ApplicantActionsMenu";
 
 const STATUS_TABS = ["APPLIED", "SHORTLISTED", "ACCEPTED", "REJECTED"];
 
@@ -127,8 +128,12 @@ function ManageJobPage() {
                 <div className="min-w-0">
                   <Link
                     to={`/gigs/${applicant.gigResponseDTO?.id}`}
-                    className="font-body font-semibold text-sm text-ink hover:text-primary transition"
+                    className="inline-flex items-center gap-1.5 font-body font-semibold text-sm text-ink hover:text-primary transition group"
                   >
+                    <UserCircle2
+                      size={14}
+                      className="text-faint group-hover:text-primary transition"
+                    />
                     {applicant.gigResponseDTO?.gigFirstName}{" "}
                     {applicant.gigResponseDTO?.gigLastName}
                   </Link>
@@ -150,31 +155,21 @@ function ManageJobPage() {
                 </div>
 
                 {(statusTab === "APPLIED" || statusTab === "SHORTLISTED") && (
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      onClick={() => acceptProposal.mutate(applicant.id)}
-                      disabled={acceptProposal.isPending || !applicant.id}
-                      className="bg-primary text-white text-xs font-body font-semibold px-3 py-1.5 rounded-lg hover:bg-primary-hover disabled:opacity-50 transition"
-                    >
-                      Hire
-                    </button>
-                    {statusTab === "APPLIED" && (
-                      <button
-                        onClick={() => shortlistProposal.mutate(applicant.id)}
-                        disabled={shortlistProposal.isPending || !applicant.id}
-                        className="text-xs font-body font-semibold text-amber border border-amber/30 px-3 py-1.5 rounded-lg hover:bg-amber/5 disabled:opacity-50 transition"
-                      >
-                        Shortlist
-                      </button>
-                    )}
-                    <button
-                      onClick={() => rejectProposal.mutate(applicant.id)}
-                      disabled={rejectProposal.isPending || !applicant.id}
-                      className="text-xs font-body font-semibold text-muted border border-border px-3 py-1.5 rounded-lg hover:border-ink/30 disabled:opacity-50 transition"
-                    >
-                      Reject
-                    </button>
-                  </div>
+                  <ApplicantActionsMenu
+                    onHire={() => acceptProposal.mutate(applicant.id)}
+                    onShortlist={
+                      statusTab === "APPLIED"
+                        ? () => shortlistProposal.mutate(applicant.id)
+                        : undefined
+                    }
+                    onReject={() => rejectProposal.mutate(applicant.id)}
+                    disabled={
+                      !applicant.id ||
+                      acceptProposal.isPending ||
+                      shortlistProposal.isPending ||
+                      rejectProposal.isPending
+                    }
+                  />
                 )}
               </div>
             </div>

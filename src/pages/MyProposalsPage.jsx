@@ -74,7 +74,17 @@ function MyProposalsPage() {
             <div key={proposal.id ?? i} className="bg-surface border border-border rounded-xl p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-sm font-body text-ink line-clamp-2">{proposal.coverLetter}</p>
+                  {proposal.jobTitle && (
+                    <Link
+                      to={proposal.jobId ? `/jobs/${proposal.jobId}` : '#'}
+                      className="font-body font-semibold text-sm text-ink hover:text-primary transition line-clamp-1"
+                    >
+                      {proposal.jobTitle}
+                    </Link>
+                  )}
+                  <p className="text-sm font-body text-muted line-clamp-2 mt-0.5">
+                    {proposal.coverLetter}
+                  </p>
                   <div className="flex items-center gap-3 mt-2 text-xs font-body text-faint">
                     <span className="font-mono text-ink font-semibold">₹{proposal.budget}</span>
                     <span>·</span>
