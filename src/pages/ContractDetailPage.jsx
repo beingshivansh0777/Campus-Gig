@@ -1,28 +1,42 @@
 import { useState, useEffect } from "react";
+
 import { useParams } from "react-router-dom";
+
 import { useContract } from "../features/contracts/hooks/useContract";
+
 import {
   useUpdateProgress,
   useActivateContract,
   useCompleteContract,
 } from "../features/contracts/hooks/useContractActions";
+
 import { useAuthStore } from "../features/auth/authStore";
+
 import BreakContractModal from "../features/contracts/components/BreakContractModal";
+
 import {
   CONTRACT_STATUS_LABELS,
   PROGRESS_STATUS_LABELS,
   PROGRESS_ORDER,
 } from "../lib/constants";
 
+import ChatWindow from "../features/chat/components/ChatWindow";
+
 function ContractDetailPage() {
   const { contractId } = useParams();
+
   const { data: contract, isLoading, isError } = useContract(contractId);
+
   const isGig = useAuthStore((state) => state.isGig);
+
   const [showBreakModal, setShowBreakModal] = useState(false);
+
   const [selectedProgress, setSelectedProgress] = useState("");
 
   const updateProgress = useUpdateProgress(contractId);
+
   const activateContract = useActivateContract(contractId);
+
   const completeContract = useCompleteContract(contractId);
 
   // Keep the dropdown's selection in sync once contract data loads or changes
@@ -49,8 +63,13 @@ function ContractDetailPage() {
   }
 
   const otherPartyLabel = isGig ? contract.client : contract.gigName;
-  const currentProgressIndex = PROGRESS_ORDER.indexOf(contract.progressStatus);
+
+  const currentProgressIndex = PROGRESS_ORDER.indexOf(
+    contract.progressStatus
+  );
+
   const nextProgress = PROGRESS_ORDER[currentProgressIndex + 1];
+
   const isTerminal = ["COMPLETE", "CANCEL", "WITHDRAWN"].includes(
     contract.status
   );
@@ -61,10 +80,12 @@ function ContractDetailPage() {
         <h1 className="font-display text-2xl font-bold text-ink">
           {contract.jobTitle}
         </h1>
+
         <span className="text-xs font-body font-medium px-2.5 py-1 rounded-full bg-primary/10 text-primary shrink-0">
           {CONTRACT_STATUS_LABELS[contract.status] || contract.status}
         </span>
       </div>
+
       <p className="text-sm font-body text-muted mb-6">
         {isGig ? "Client" : "Freelancer"}: {otherPartyLabel}
       </p>
@@ -74,14 +95,17 @@ function ContractDetailPage() {
           <p className="font-mono font-bold text-lg text-ink">
             ₹{contract.agreementAmount}
           </p>
+
           <p className="text-xs font-body text-faint mt-0.5">
             Agreement Amount
           </p>
         </div>
+
         <div className="bg-surface border border-border rounded-xl p-4 text-center">
           <p className="font-body font-bold text-sm text-ink">
             {new Date(contract.deadline).toLocaleDateString()}
           </p>
+
           <p className="text-xs font-body text-faint mt-0.5">
             Expected Delivery
           </p>
@@ -93,9 +117,13 @@ function ContractDetailPage() {
         <h2 className="font-body font-semibold text-sm text-ink mb-3">
           Progress
         </h2>
+
         <div className="flex items-center gap-2 mb-4">
           {PROGRESS_ORDER.map((step, i) => (
-            <div key={step} className="flex items-center gap-2 flex-1">
+            <div
+              key={step}
+              className="flex items-center gap-2 flex-1"
+            >
               <div
                 className={`h-2 flex-1 rounded-full ${
                   i <= currentProgressIndex ? "bg-primary" : "bg-border"
@@ -104,6 +132,7 @@ function ContractDetailPage() {
             </div>
           ))}
         </div>
+
         <p className="text-sm font-body text-muted mb-4">
           Current:{" "}
           <span className="text-ink font-medium">
@@ -123,12 +152,14 @@ function ContractDetailPage() {
                 <option value={contract.progressStatus}>
                   {PROGRESS_STATUS_LABELS[contract.progressStatus]} (current)
                 </option>
+
                 {nextProgress && (
                   <option value={nextProgress}>
                     {PROGRESS_STATUS_LABELS[nextProgress]}
                   </option>
                 )}
               </select>
+
               <button
                 onClick={() => updateProgress.mutate(selectedProgress)}
                 disabled={
@@ -149,6 +180,18 @@ function ContractDetailPage() {
           </p>
         )}
       </div>
+
+      {/* Messages */}
+      {!["PENDING", "WITHDRAWN", "CANCEL"].includes(contract.status) &&
+        contract.conversationId && (
+          <div className="mb-6">
+            <h2 className="font-body font-semibold text-sm text-ink mb-3">
+              Messages
+            </h2>
+
+            <ChatWindow conversationId={contract.conversationId} />
+          </div>
+        )}
 
       {/* Actions */}
       {!isTerminal && (
@@ -187,7 +230,9 @@ function ContractDetailPage() {
             onClick={() => setShowBreakModal(true)}
             className="text-sm font-body font-semibold text-error border border-error/20 px-4 py-2 rounded-lg hover:bg-error/5 transition"
           >
-            {contract.status === "PENDING" ? "Withdraw" : "Cancel Contract"}
+            {contract.status === "PENDING"
+              ? "Withdraw"
+              : "Cancel Contract"}
           </button>
         </div>
       )}
