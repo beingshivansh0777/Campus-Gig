@@ -14,7 +14,10 @@ import {
   PROGRESS_ORDER,
 } from "../lib/constants";
 import ChatWindow from "../features/chat/components/ChatWindow";
-import FloatingChatWidget from '../features/chat/components/FloatingChatWidget';
+import FloatingChatWidget from "../features/chat/components/FloatingChatWidget";
+import ReviewModal from "../features/reviews/components/reviewModal";
+import { useMyReview } from "../features/reviews/hooks/useMyReview";
+import StarRating from "../features/reviews/components/StarRating";
 
 function ContractDetailPage() {
   const { contractId } = useParams();
@@ -25,6 +28,8 @@ function ContractDetailPage() {
 
   const [showBreakModal, setShowBreakModal] = useState(false);
 
+  const [showReviewModal, setShowReviewModal] = useState(false);
+
   const [selectedProgress, setSelectedProgress] = useState("");
 
   const updateProgress = useUpdateProgress(contractId);
@@ -32,6 +37,11 @@ function ContractDetailPage() {
   const activateContract = useActivateContract(contractId);
 
   const completeContract = useCompleteContract(contractId);
+
+  const { data: myReview, isLoading: reviewLoading } = useMyReview(
+    contractId,
+    contract?.status === "COMPLETE",
+  );
 
   // Keep the dropdown's selection in sync once contract data loads or changes
   useEffect(() => {
@@ -77,6 +87,28 @@ function ContractDetailPage() {
           {CONTRACT_STATUS_LABELS[contract.status] || contract.status}
         </span>
       </div>
+
+      {/* Leave a Review */}
+      {contract.status === "COMPLETE" &&
+        !reviewLoading &&
+        (myReview ? (
+          <button
+            onClick={() => setShowReviewModal(true)}
+            className="flex items-center gap-2 mb-6 group"
+          >
+            <StarRating value={myReview.rating} readOnly size={20} />
+            <span className="text-sm font-body text-muted group-hover:text-primary transition">
+               {myReview.rating}/5   · Edit
+            </span>
+          </button>
+        ) : (
+          <button
+            onClick={() => setShowReviewModal(true)}
+            className="text-sm font-body font-semibold text-primary border border-primary/30 px-4 py-2 rounded-lg hover:bg-primary/5 transition mb-6"
+          >
+            Leave a Review
+          </button>
+        ))}
 
       <p className="text-sm font-body text-muted mb-6">
         {isGig ? "Client" : "Freelancer"}: {otherPartyLabel}
@@ -225,6 +257,23 @@ function ContractDetailPage() {
         <BreakContractModal
           contractId={contractId}
           onClose={() => setShowBreakModal(false)}
+        />
+      )}
+
+      {showReviewModal && (
+        <ReviewModal
+          contractId={contractId}
+          revieweeName={otherPartyLabel}
+          onClose={() => setShowReviewModal(false)}
+        />
+      )}
+
+      {showReviewModal && (
+        <ReviewModal
+          contractId={contractId}
+          revieweeName={otherPartyLabel}
+          existingReview={myReview}
+          onClose={() => setShowReviewModal(false)}
         />
       )}
     </div>

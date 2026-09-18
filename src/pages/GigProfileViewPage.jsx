@@ -1,10 +1,15 @@
-import { useParams, Link } from 'react-router-dom';
-import { GraduationCap, Building2, Mail, Phone, Briefcase } from 'lucide-react';
-import { useGigProfileById } from '../features/gigProfile/hooks/useGigProfileById';
+import { useParams, Link } from "react-router-dom";
+import { GraduationCap, Building2, Mail, Phone, Briefcase } from "lucide-react";
+import { useGigProfileById } from "../features/gigProfile/hooks/useGigProfileById";
+import ReviewsList from "../features/reviews/components/ReviewsList";
+import { useReviews } from "../features/reviews/hooks/useReviews";
 
 function GigProfileViewPage() {
   const { gigId } = useParams();
+
   const { data: gig, isLoading, isError } = useGigProfileById(gigId);
+
+  const { data: reviews, isLoading: reviewsLoading } = useReviews();
 
   if (isLoading) {
     return (
@@ -15,7 +20,9 @@ function GigProfileViewPage() {
   if (isError || !gig) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-10 text-center">
-        <p className="font-body text-sm text-muted">This profile couldn't be found.</p>
+        <p className="font-body text-sm text-muted">
+          This profile couldn't be found.
+        </p>
       </div>
     );
   }
@@ -27,19 +34,24 @@ function GigProfileViewPage() {
           <span className="w-16 h-16 rounded-full bg-linear-to-br from-primary to-accent-pink text-white flex items-center justify-center font-display font-bold text-2xl shrink-0">
             {gig.gigFirstName?.[0]}
           </span>
+
           <div className="min-w-0">
             <h1 className="font-display text-xl font-bold text-ink">
               {gig.gigFirstName} {gig.gigLastName}
             </h1>
+
             <p className="text-sm font-body text-muted mt-0.5">{gig.title}</p>
+
             <span
               className={`inline-block text-xs font-body font-medium px-2 py-0.5 rounded-full mt-2 ${
-                gig.availabilityStatus === 'AVAILABLE'
-                  ? 'bg-success/10 text-success'
-                  : 'bg-faint/10 text-faint'
+                gig.availabilityStatus === "AVAILABLE"
+                  ? "bg-success/10 text-success"
+                  : "bg-faint/10 text-faint"
               }`}
             >
-              {gig.availabilityStatus === 'AVAILABLE' ? 'Available for work' : 'Unavailable'}
+              {gig.availabilityStatus === "AVAILABLE"
+                ? "Available for work"
+                : "Unavailable"}
             </span>
           </div>
         </div>
@@ -47,7 +59,10 @@ function GigProfileViewPage() {
 
       {gig.description && (
         <div className="bg-surface border border-border rounded-xl p-6 mb-6">
-          <h2 className="font-body font-semibold text-sm text-ink mb-2">About</h2>
+          <h2 className="font-body font-semibold text-sm text-ink mb-2">
+            About
+          </h2>
+
           <p className="text-sm font-body text-muted leading-relaxed whitespace-pre-line">
             {gig.description}
           </p>
@@ -56,7 +71,10 @@ function GigProfileViewPage() {
 
       {gig.gigSkills?.length > 0 && (
         <div className="bg-surface border border-border rounded-xl p-6 mb-6">
-          <h2 className="font-body font-semibold text-sm text-ink mb-3">Skills</h2>
+          <h2 className="font-body font-semibold text-sm text-ink mb-3">
+            Skills
+          </h2>
+
           <div className="flex flex-wrap gap-2">
             {gig.gigSkills.map((skill) => (
               <span
@@ -71,21 +89,34 @@ function GigProfileViewPage() {
       )}
 
       <div className="bg-surface border border-border rounded-xl p-6 space-y-3">
-        <h2 className="font-body font-semibold text-sm text-ink mb-1">Details</h2>
+        <h2 className="font-body font-semibold text-sm text-ink mb-1">
+          Details
+        </h2>
+
         <div className="flex items-center gap-2 text-sm font-body text-muted">
           <Briefcase size={14} />
-          <span>{gig.jobCategory?.replace(/_/g, ' ')}</span>
+
+          <span>{gig.jobCategory?.replace(/\_/g, " ")}</span>
         </div>
+
         {gig.college && (
           <div className="flex items-center gap-2 text-sm font-body text-muted">
             <GraduationCap size={14} />
+
             <span>
               {gig.college}
+
               {gig.department && ` · ${gig.department}`}
+
               {gig.semester && ` · Semester ${gig.semester}`}
             </span>
           </div>
         )}
+      </div>
+
+      {/* Reviews */}
+      <div className="mt-6">
+        <ReviewsList reviews={reviews} isLoading={reviewsLoading} />
       </div>
     </div>
   );
