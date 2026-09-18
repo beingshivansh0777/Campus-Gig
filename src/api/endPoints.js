@@ -43,6 +43,7 @@ export const ENDPOINTS = {
   },
   chat: {
     messages: (conversationId) => `/conversations/${conversationId}/messages`,
+    start: (jobApplicationId) => `/conversations/start/${jobApplicationId}`,
   },
   skills: {
     add: "/skills/add-skill",

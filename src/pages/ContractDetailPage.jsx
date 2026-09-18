@@ -1,26 +1,20 @@
 import { useState, useEffect } from "react";
-
 import { useParams } from "react-router-dom";
-
 import { useContract } from "../features/contracts/hooks/useContract";
-
 import {
   useUpdateProgress,
   useActivateContract,
   useCompleteContract,
 } from "../features/contracts/hooks/useContractActions";
-
 import { useAuthStore } from "../features/auth/authStore";
-
 import BreakContractModal from "../features/contracts/components/BreakContractModal";
-
 import {
   CONTRACT_STATUS_LABELS,
   PROGRESS_STATUS_LABELS,
   PROGRESS_ORDER,
 } from "../lib/constants";
-
 import ChatWindow from "../features/chat/components/ChatWindow";
+import FloatingChatWidget from '../features/chat/components/FloatingChatWidget';
 
 function ContractDetailPage() {
   const { contractId } = useParams();
@@ -64,14 +58,12 @@ function ContractDetailPage() {
 
   const otherPartyLabel = isGig ? contract.client : contract.gigName;
 
-  const currentProgressIndex = PROGRESS_ORDER.indexOf(
-    contract.progressStatus
-  );
+  const currentProgressIndex = PROGRESS_ORDER.indexOf(contract.progressStatus);
 
   const nextProgress = PROGRESS_ORDER[currentProgressIndex + 1];
 
   const isTerminal = ["COMPLETE", "CANCEL", "WITHDRAWN"].includes(
-    contract.status
+    contract.status,
   );
 
   return (
@@ -120,10 +112,7 @@ function ContractDetailPage() {
 
         <div className="flex items-center gap-2 mb-4">
           {PROGRESS_ORDER.map((step, i) => (
-            <div
-              key={step}
-              className="flex items-center gap-2 flex-1"
-            >
+            <div key={step} className="flex items-center gap-2 flex-1">
               <div
                 className={`h-2 flex-1 rounded-full ${
                   i <= currentProgressIndex ? "bg-primary" : "bg-border"
@@ -184,13 +173,10 @@ function ContractDetailPage() {
       {/* Messages */}
       {!["PENDING", "WITHDRAWN", "CANCEL"].includes(contract.status) &&
         contract.conversationId && (
-          <div className="mb-6">
-            <h2 className="font-body font-semibold text-sm text-ink mb-3">
-              Messages
-            </h2>
-
-            <ChatWindow conversationId={contract.conversationId} />
-          </div>
+          <FloatingChatWidget
+            conversationId={contract.conversationId}
+            otherPartyName={otherPartyLabel}
+          />
         )}
 
       {/* Actions */}
@@ -230,9 +216,7 @@ function ContractDetailPage() {
             onClick={() => setShowBreakModal(true)}
             className="text-sm font-body font-semibold text-error border border-error/20 px-4 py-2 rounded-lg hover:bg-error/5 transition"
           >
-            {contract.status === "PENDING"
-              ? "Withdraw"
-              : "Cancel Contract"}
+            {contract.status === "PENDING" ? "Withdraw" : "Cancel Contract"}
           </button>
         </div>
       )}
