@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useContract } from "../features/contracts/hooks/useContract";
+import { ArrowLeft } from "lucide-react";
 import {
   useUpdateProgress,
   useActivateContract,
@@ -21,21 +22,14 @@ import StarRating from "../features/reviews/components/StarRating";
 
 function ContractDetailPage() {
   const { contractId } = useParams();
-
+  const navigate = useNavigate();
   const { data: contract, isLoading, isError } = useContract(contractId);
-
   const isGig = useAuthStore((state) => state.isGig);
-
   const [showBreakModal, setShowBreakModal] = useState(false);
-
   const [showReviewModal, setShowReviewModal] = useState(false);
-
   const [selectedProgress, setSelectedProgress] = useState("");
-
   const updateProgress = useUpdateProgress(contractId);
-
   const activateContract = useActivateContract(contractId);
-
   const completeContract = useCompleteContract(contractId);
 
   const { data: myReview, isLoading: reviewLoading } = useMyReview(
@@ -67,17 +61,21 @@ function ContractDetailPage() {
   }
 
   const otherPartyLabel = isGig ? contract.client : contract.gigName;
-
   const currentProgressIndex = PROGRESS_ORDER.indexOf(contract.progressStatus);
-
   const nextProgress = PROGRESS_ORDER[currentProgressIndex + 1];
-
   const isTerminal = ["COMPLETE", "CANCEL", "WITHDRAWN"].includes(
     contract.status,
   );
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-1.5 text-sm font-body font-medium text-muted hover:text-ink transition mb-4"
+      >
+        <ArrowLeft size={16} /> Back
+      </button>
+
       <div className="flex items-start justify-between gap-4 mb-1">
         <h1 className="font-display text-2xl font-bold text-ink">
           {contract.jobTitle}
@@ -87,7 +85,6 @@ function ContractDetailPage() {
           {CONTRACT_STATUS_LABELS[contract.status] || contract.status}
         </span>
       </div>
-
       {/* Leave a Review */}
       {contract.status === "COMPLETE" &&
         !reviewLoading &&
@@ -98,7 +95,7 @@ function ContractDetailPage() {
           >
             <StarRating value={myReview.rating} readOnly size={20} />
             <span className="text-sm font-body text-muted group-hover:text-primary transition">
-               {myReview.rating}/5   · Edit
+              {myReview.rating}/5 · Edit
             </span>
           </button>
         ) : (
@@ -264,15 +261,6 @@ function ContractDetailPage() {
         <ReviewModal
           contractId={contractId}
           revieweeName={otherPartyLabel}
-          onClose={() => setShowReviewModal(false)}
-        />
-      )}
-
-      {showReviewModal && (
-        <ReviewModal
-          contractId={contractId}
-          revieweeName={otherPartyLabel}
-          existingReview={myReview}
           onClose={() => setShowReviewModal(false)}
         />
       )}

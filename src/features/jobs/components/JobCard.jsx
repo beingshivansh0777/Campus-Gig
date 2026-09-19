@@ -1,21 +1,21 @@
 // src/features/jobs/components/JobCard.jsx
-import { Link } from 'react-router-dom';
-import { Clock, BarChart3 } from 'lucide-react';
-import { JOB_STATUS_LABELS } from '../../../lib/constants';
-import SaveJobButton from './SaveJobButton';
+import { Link } from "react-router-dom";
+import { Clock, CalendarDays, BarChart3 } from "lucide-react";
+import { JOB_STATUS_LABELS } from "../../../lib/constants";
+import SaveJobButton from "./SaveJobButton";
 
 const statusStyles = {
-  OPEN: 'bg-success/10 text-success',
-  CLOSED: 'bg-faint/10 text-faint',
-  DRAFT: 'bg-amber/10 text-amber',
-  DELETED: 'bg-error/10 text-error',
+  OPEN: "bg-success/10 text-success",
+  CLOSED: "bg-faint/10 text-faint",
+  DRAFT: "bg-amber/10 text-amber",
+  DELETED: "bg-error/10 text-error",
 };
 
 const gradientVariants = [
-  'from-primary to-accent-pink',
-  'from-[#EC4899] to-[#F472B6]',
-  'from-[#F59E0B] to-[#FBBF24]',
-  'from-[#14B8A6] to-[#2DD4BF]',
+  "from-primary to-accent-pink",
+  "from-[#EC4899] to-[#F472B6]",
+  "from-[#F59E0B] to-[#FBBF24]",
+  "from-[#14B8A6] to-[#2DD4BF]",
 ];
 
 function getGradientForCategory(category) {
@@ -27,14 +27,30 @@ function getGradientForCategory(category) {
 function JobCard({ job, linkTo, showBookmark = false }) {
   const category = job.category;
   const gradient = getGradientForCategory(category);
-  const posterName = [job.clientFirstName, job.clientLastName].filter(Boolean).join(' ');
+  const posterName = [job.clientFirstName, job.clientLastName]
+    .filter(Boolean)
+    .join(" ");
 
   const content = (
     <div className="bg-surface border border-border rounded-xl p-4 hover:border-primary/30 hover:shadow-sm transition relative">
+      {showBookmark && (
+        <div
+          className="absolute top-3 right-3 z-10"
+          onClick={(e) => {
+            // Prevent the surrounding <Link> from navigating when the
+            // bookmark itself is clicked.
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
+          <SaveJobButton jobId={job.id} />
+        </div>
+      )}
+
       {posterName && (
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-2 mb-3 pr-8">
           <span className="w-6 h-6 rounded-full bg-linear-to-br from-primary to-accent-pink text-white flex items-center justify-center text-xs font-semibold shrink-0">
-            {job.clientFirstName?.[0] || 'U'}
+            {job.clientFirstName?.[0] || "U"}
           </span>
           <span className="text-xs font-body text-muted">{posterName}</span>
         </div>
@@ -44,16 +60,18 @@ function JobCard({ job, linkTo, showBookmark = false }) {
         <span
           className={`inline-block text-xs font-body font-semibold text-white px-2.5 py-1 rounded-full mb-2.5 bg-linear-to-r ${gradient}`}
         >
-          {category.replace(/_/g, ' ')}
+          {category.replace(/_/g, " ")}
         </span>
       )}
 
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="font-body font-semibold text-sm text-ink line-clamp-1">{job.title}</h3>
+      <div className="flex items-start justify-between gap-3 pr-8">
+        <h3 className="font-body font-semibold text-sm text-ink line-clamp-1">
+          {job.title}
+        </h3>
         {job.jobStatus && (
           <span
             className={`text-xs font-body font-medium px-2 py-0.5 rounded-full shrink-0 ${
-              statusStyles[job.jobStatus] || 'bg-faint/10 text-faint'
+              statusStyles[job.jobStatus] || "bg-faint/10 text-faint"
             }`}
           >
             {JOB_STATUS_LABELS[job.jobStatus] || job.jobStatus}
@@ -62,26 +80,33 @@ function JobCard({ job, linkTo, showBookmark = false }) {
       </div>
 
       {job.description && (
-        <p className="text-sm font-body text-muted mt-1.5 line-clamp-2">{job.description}</p>
+        <p className="text-sm font-body text-muted mt-1.5 line-clamp-2">
+          {job.description}
+        </p>
       )}
 
-      <div className="flex items-center justify-between mt-3">
-        <div className="flex items-center gap-4 text-xs font-body text-faint">
-          <span className="font-mono text-ink font-semibold">₹{job.budget}</span>
-          {job.deadline && (
-            <span className="flex items-center gap-1">
-              <Clock size={12} />
-              {new Date(job.deadline).toLocaleDateString()}
-            </span>
-          )}
-          {job.experience && (
-            <span className="flex items-center gap-1">
-              <BarChart3 size={12} />
-              {job.experience.charAt(0) + job.experience.slice(1).toLowerCase()}
-            </span>
-          )}
-        </div>
-        {showBookmark && <SaveJobButton jobId={job.id} />}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs font-body text-faint mt-3">
+        <span className="font-mono text-ink font-semibold whitespace-nowrap">
+          ₹{job.budget}
+        </span>
+        {job.publishAt && (
+          <span className="flex items-center gap-1 whitespace-nowrap">
+            <CalendarDays size={12} />
+            Posted {new Date(job.publishAt).toLocaleDateString()}
+          </span>
+        )}
+        {job.deadline && (
+          <span className="flex items-center gap-1 whitespace-nowrap">
+            <Clock size={12} />
+            {new Date(job.deadline).toLocaleDateString()}
+          </span>
+        )}
+        {job.experience && (
+          <span className="flex items-center gap-1 whitespace-nowrap">
+            <BarChart3 size={12} />
+            {job.experience.charAt(0) + job.experience.slice(1).toLowerCase()}
+          </span>
+        )}
       </div>
     </div>
   );

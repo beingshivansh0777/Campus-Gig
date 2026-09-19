@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Bell, ChevronDown, Menu, X } from 'lucide-react';
-import { useAuthStore } from '../../features/auth/authStore';
+import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Bell, ChevronDown, Menu, X } from "lucide-react";
+import { useAuthStore } from "../../features/auth/authStore";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -19,31 +19,33 @@ function Navbar() {
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [menuOpen]);
 
   const handleLogout = () => {
     logout();
     setMenuOpen(false);
     setMobileOpen(false);
-    navigate('/login');
+    navigate("/login");
   };
 
   const primaryLinks = isGig
     ? [
-        { to: '/jobs', label: 'Find Work' },
-        { to: '/proposals', label: 'My Proposals' },
-        { to: '/saved-jobs', label: 'Saved Jobs' },
-        { to: '/contracts', label: 'Active Contracts' },
+        { to: "/jobs", label: "Find Work" },
+        { to: "/proposals", label: "My Proposals" },
+        { to: "/saved-jobs", label: "Saved Jobs" },
+        { to: "/contracts", label: "Active Contracts" },
       ]
     : [
-        { to: '/jobs/create', label: 'Post a Project' },
-        { to: '/jobs/my-jobs', label: 'My Jobs' },
-        { to: '/proposals-received', label: 'Proposals' },
+        { to: "/jobs/create", label: "Post a Project" },
+        { to: "/jobs/my-jobs", label: "My Jobs" },
+        { to: "/proposals-received", label: "Proposals" },
       ];
 
-  const secondaryLinks = isGig ? [] : [{ to: '/contracts', label: 'Contracts' }];
+  const secondaryLinks = isGig
+    ? []
+    : [{ to: "/contracts", label: "Contracts" }];
 
   return (
     <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
@@ -86,12 +88,12 @@ function Navbar() {
                   className="flex items-center gap-2 text-sm font-body text-ink group"
                 >
                   <span className="w-8 h-8 rounded-full bg-linear-to-br from-primary to-accent-pink text-white flex items-center justify-center font-semibold text-sm transition-transform duration-200 group-hover:scale-105 ring-2 ring-transparent group-hover:ring-primary/20">
-                    {user?.firstName?.[0] || 'U'}
+                    {user?.firstName?.[0] || "U"}
                   </span>
                   <ChevronDown
                     size={16}
                     className={`text-muted transition-transform duration-200 ${
-                      menuOpen ? 'rotate-180' : ''
+                      menuOpen ? "rotate-180" : ""
                     }`}
                   />
                 </button>
@@ -99,8 +101,8 @@ function Navbar() {
                 <div
                   className={`absolute right-0 mt-2 w-52 bg-surface border border-border rounded-lg shadow-sm py-1 origin-top-right transition-all duration-150 ${
                     menuOpen
-                      ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
-                      : 'opacity-0 scale-95 -translate-y-1 pointer-events-none'
+                      ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+                      : "opacity-0 scale-95 -translate-y-1 pointer-events-none"
                   }`}
                 >
                   <Link
@@ -144,20 +146,24 @@ function Navbar() {
 
               <button
                 onClick={() => setMobileOpen((o) => !o)}
-                className="md:hidden text-ink transition-transform duration-200 active:scale-90"
+                className="md:hidden flex items-center justify-center w-10 h-10 -mr-2 rounded-lg text-ink hover:bg-background transition-all duration-200 active:scale-90"
                 aria-label="Menu"
               >
                 <div className="relative w-5.5 h-5.5">
                   <X
                     size={22}
                     className={`absolute inset-0 transition-all duration-200 ${
-                      mobileOpen ? 'opacity-100 rotate-0' : 'opacity-0 rotate-90'
+                      mobileOpen
+                        ? "opacity-100 rotate-0"
+                        : "opacity-0 rotate-90"
                     }`}
                   />
                   <Menu
                     size={22}
                     className={`absolute inset-0 transition-all duration-200 ${
-                      mobileOpen ? 'opacity-0 -rotate-90' : 'opacity-100 rotate-0'
+                      mobileOpen
+                        ? "opacity-0 -rotate-90"
+                        : "opacity-100 rotate-0"
                     }`}
                   />
                 </div>
@@ -184,7 +190,7 @@ function Navbar() {
 
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          mobileOpen && token ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          mobileOpen && token ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div className="border-t border-border bg-surface px-4 py-3 space-y-1">

@@ -41,3 +41,7 @@ export const PROGRESS_STATUS_LABELS = {
 };
 
 export const PROGRESS_ORDER = ['NOT_STARTED', 'IN_PROGRESS', 'COMPLETED'];
+
+export const REPORT_REASONS = [
+
+];
