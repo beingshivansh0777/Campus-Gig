@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useContract } from "../features/contracts/hooks/useContract";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Flag } from "lucide-react";
 import {
   useUpdateProgress,
   useActivateContract,
@@ -19,6 +19,7 @@ import FloatingChatWidget from "../features/chat/components/FloatingChatWidget";
 import ReviewModal from "../features/reviews/components/reviewModal";
 import { useMyReview } from "../features/reviews/hooks/useMyReview";
 import StarRating from "../features/reviews/components/StarRating";
+import ReportModal from "../features/reports/components/ReportModal";
 
 function ContractDetailPage() {
   const { contractId } = useParams();
@@ -28,6 +29,8 @@ function ContractDetailPage() {
   const [showBreakModal, setShowBreakModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [selectedProgress, setSelectedProgress] = useState("");
+  const [showReportModal, setShowReportModal] = useState(false);
+
   const updateProgress = useUpdateProgress(contractId);
   const activateContract = useActivateContract(contractId);
   const completeContract = useCompleteContract(contractId);
@@ -85,6 +88,7 @@ function ContractDetailPage() {
           {CONTRACT_STATUS_LABELS[contract.status] || contract.status}
         </span>
       </div>
+
       {/* Leave a Review */}
       {contract.status === "COMPLETE" &&
         !reviewLoading &&
@@ -210,7 +214,7 @@ function ContractDetailPage() {
 
       {/* Actions */}
       {!isTerminal && (
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 mb-3">
           {!isGig && contract.status === "PENDING" && (
             <button
               onClick={() => activateContract.mutate()}
@@ -245,9 +249,21 @@ function ContractDetailPage() {
             onClick={() => setShowBreakModal(true)}
             className="text-sm font-body font-semibold text-error border border-error/20 px-4 py-2 rounded-lg hover:bg-error/5 transition"
           >
-            {contract.status === "PENDING" ? "Withdraw" : "Cancel Contract"}
+            {contract.status === "PENDING"
+              ? "Withdraw"
+              : "Cancel Contract"}
           </button>
         </div>
+      )}
+
+      {/* Report Issue */}
+      {["ACTIVE", "COMPLETE"].includes(contract.status) && (
+        <button
+          onClick={() => setShowReportModal(true)}
+          className="flex items-center gap-1.5 text-sm font-body font-medium text-faint hover:text-error transition"
+        >
+          <Flag size={14} /> Report an Issue
+        </button>
       )}
 
       {showBreakModal && (
@@ -262,6 +278,14 @@ function ContractDetailPage() {
           contractId={contractId}
           revieweeName={otherPartyLabel}
           onClose={() => setShowReviewModal(false)}
+        />
+      )}
+
+      {showReportModal && (
+        <ReportModal
+          contractId={contractId}
+          otherPartyName={otherPartyLabel}
+          onClose={() => setShowReportModal(false)}
         />
       )}
     </div>
