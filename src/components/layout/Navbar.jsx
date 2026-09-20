@@ -35,7 +35,7 @@ function Navbar() {
         { to: "/jobs", label: "Find Work" },
         { to: "/proposals", label: "My Proposals" },
         { to: "/saved-jobs", label: "Saved Jobs" },
-        { to: "/contracts", label: "Active Contracts" },
+        { to: "/contracts", label: " Contracts" },
       ]
     : [
         { to: "/jobs/create", label: "Post a Project" },
@@ -59,7 +59,7 @@ function Navbar() {
 
         {token && (
           <nav className="hidden md:flex items-center gap-6">
-            {primaryLinks.map((link) => (
+            {[...primaryLinks, ...secondaryLinks].map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
@@ -122,16 +122,16 @@ function Navbar() {
 
                   <div className="border-t border-border my-1" />
 
-                  {secondaryLinks.map((link) => (
-                    <Link
-                      key={link.to}
-                      to={link.to}
-                      onClick={() => setMenuOpen(false)}
-                      className="block px-4 py-2 text-sm font-body text-ink hover:bg-background hover:pl-5 transition-all duration-150"
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+                  {/* {secondaryLinks.map((link) => (
+                    // <Link
+                    //   key={link.to}
+                    //   to={link.to}
+                    //   onClick={() => setMenuOpen(false)}
+                    //   className="block px-4 py-2 text-sm font-body text-ink hover:bg-background hover:pl-5 transition-all duration-150"
+                    // >
+                    //   {link.label}
+                    // </Link>
+                  ))} */}
 
                   <div className="border-t border-border my-1" />
 

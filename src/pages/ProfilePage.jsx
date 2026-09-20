@@ -6,20 +6,24 @@ import BecomeGigForm from "../features/gigProfile/components/BecomeGigForm";
 import EditGigProfileForm from "../features/gigProfile/components/EditGigProfileForm";
 import ReviewsList from "../features/reviews/components/ReviewsList";
 import { useReviews } from "../features/reviews/hooks/useReviews";
+import ReportsList from "../features/reports/components/ReportsList";
+import { useMyReports } from "../features/reports/hooks/useMyReports";
 
 function ProfilePage() {
   const isGig = useAuthStore((state) => state.isGig);
   const [tab, setTab] = useState("view");
   const { data: reviews, isLoading: reviewsLoading } = useReviews();
+  const { data: reports, isLoading: reportsLoading } = useMyReports();
   const tabs = isGig
-    ? ["view", "edit", "gig-profile", "reviews"]
-    : ["view", "edit", "become-gig", "reviews"];
+    ? ["view", "edit", "gig-profile", "reviews", "reports"]
+    : ["view", "edit", "become-gig", "reviews", "reports"];
   const tabLabels = {
     view: "Overview",
     edit: "Edit Details",
     "become-gig": "Become a Campus-Gigger",
     "gig-profile": "My Gig Profile",
     reviews: "Reviews",
+    reports: "Reports",
   };
 
   return (
@@ -68,6 +72,10 @@ function ProfilePage() {
 
           {tab === "reviews" && (
             <ReviewsList reviews={reviews} isLoading={reviewsLoading} />
+          )}
+
+          {tab === "reports" && (
+            <ReportsList reports={reports} isLoading={reportsLoading} />
           )}
         </div>
       </div>

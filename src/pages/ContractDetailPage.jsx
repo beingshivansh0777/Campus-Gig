@@ -249,9 +249,7 @@ function ContractDetailPage() {
             onClick={() => setShowBreakModal(true)}
             className="text-sm font-body font-semibold text-error border border-error/20 px-4 py-2 rounded-lg hover:bg-error/5 transition"
           >
-            {contract.status === "PENDING"
-              ? "Withdraw"
-              : "Cancel Contract"}
+            {contract.status === "PENDING" ? "Withdraw" : "Cancel Contract"}
           </button>
         </div>
       )}
@@ -277,6 +275,7 @@ function ContractDetailPage() {
         <ReviewModal
           contractId={contractId}
           revieweeName={otherPartyLabel}
+          existingReview={myReview}
           onClose={() => setShowReviewModal(false)}
         />
       )}
