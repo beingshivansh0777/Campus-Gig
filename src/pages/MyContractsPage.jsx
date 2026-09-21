@@ -1,14 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useContracts } from '../features/contracts/hooks/useContracts';
 import ContractCard from '../features/contracts/components/ContractCard';
 import { CONTRACT_STATUS_LABELS } from '../lib/constants';
 
 function MyContractsPage() {
-  const [keyword, setKeyword] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const { data: contracts, isLoading, isError } = useContracts(
-    statusFilter ? { keyword: statusFilter } : {}
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isError, isFetching } = useContracts(
+    statusFilter ? { keyword: statusFilter } : {},
+    page
   );
+
+  useEffect(() => {
+    setPage(1);
+  }, [statusFilter]);
+
+  const contracts = data?.content ?? [];
+  const totalPages = data?.totalPages ?? 1;
+
+  const goToPage = (p) => setPage(Math.min(Math.max(p, 1), totalPages));
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
@@ -53,16 +63,52 @@ function MyContractsPage() {
         <div className="bg-surface border border-border rounded-xl p-10 text-center">
           <p className="font-body text-sm text-muted">Couldn't load contracts.</p>
         </div>
-      ) : !contracts || contracts.length === 0 ? (
+      ) : contracts.length === 0 ? (
         <div className="bg-surface border border-border rounded-xl p-10 text-center">
           <p className="font-body text-sm text-muted">No contracts yet.</p>
         </div>
       ) : (
-        <div className="space-y-3">
-          {contracts.map((contract) => (
-            <ContractCard key={contract.contractId} contract={contract} />
-          ))}
-        </div>
+        <>
+          <div className={`space-y-3 transition-opacity ${isFetching ? 'opacity-60' : 'opacity-100'}`}>
+            {contracts.map((contract) => (
+              <ContractCard key={contract.contractId} contract={contract} />
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-8">
+              <button
+                onClick={() => goToPage(page - 1)}
+                disabled={page === 1}
+                className="px-3 py-1.5 text-sm font-body font-medium text-muted border border-border rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:text-ink hover:border-primary/40 transition"
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => goToPage(p)}
+                  className={`w-8 h-8 text-sm font-body font-medium rounded-lg transition ${
+                    p === page
+                      ? 'bg-primary text-white'
+                      : 'text-muted hover:text-ink hover:bg-border/30'
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+
+              <button
+                onClick={() => goToPage(page + 1)}
+                disabled={page === totalPages}
+                className="px-3 py-1.5 text-sm font-body font-medium text-muted border border-border rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:text-ink hover:border-primary/40 transition"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
