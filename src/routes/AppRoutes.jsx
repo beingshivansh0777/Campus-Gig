@@ -24,6 +24,12 @@ import ReceivedProposalsPage from "../pages/ReceivedProposalsPage";
 import MyContractsPage from "../pages/MyContractsPage";
 import ContractDetailPage from "../pages/ContractDetailPage";
 import GigProfileViewPage from "../pages/GigProfileViewPage";
+import AboutPage from "../pages/AboutPage";
+import ContactPage from "../pages/ContactPage";
+import FAQPage from "../pages/FAQPage";
+import HowItWorksPage from "../pages/HowItWorksPage";
+import TermsPage from "../pages/TermsPage";
+import PrivacyPage from "../pages/PrivacyPage";
 
 function AppRoutes() {
   return (
@@ -36,6 +42,12 @@ function AppRoutes() {
       {/* Everything else — wrapped in AppLayout (Navbar + content) */}
       <Route element={<AppLayout />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
