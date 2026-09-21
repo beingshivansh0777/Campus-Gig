@@ -63,4 +63,22 @@ export const ENDPOINTS = {
   reports: {
     create: "/report/report",
   },
+  admin: {
+    register: "/admin/register",
+    login: "/admin/login",
+    mail: "/admin/mail",
+    stats: "/admin/stats",
+    growthChart: "/admin/growth-chart",
+    popularJob: "/admin/popular-job",
+    reports: "/admin/reports",
+    report: "/admin/report",
+    jobs: "/admin/jobs",
+    job: "/admin/job",
+    jobApplications: "/admin/job-applications",
+    jobApplication: "/admin/job-application",
+    gigs: "/admin/gigs",
+    gig: "/admin/gig",
+    clients: "/admin/clients",
+    client: "/admin/client",
+  },
 };
