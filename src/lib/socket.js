@@ -1,14 +1,18 @@
-import { Client } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
-import { useAuthStore } from '../features/auth/authStore';
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+import { useAuthStore } from "../features/auth/authStore";
 
 let stompClient = null;
 
-const topicRegistry = new Map();   // conversationId -> { subscription, listeners }
+const topicRegistry = new Map(); // conversationId -> { subscription, listeners }
 const typingRegistry = new Map();
 const readRegistry = new Map();
+const notificationRegistry = {
+  subscription: null,
+  listeners: new Set(),
+};
 
-let pendingOnConnect = [];         // fns to run once connected (e.g. sendReadEvent fired too early)
+let pendingOnConnect = []; // fns to run once connected (e.g. sendReadEvent fired too early)
 
 const resubscribeAll = (client) => {
   const rebuild = (registry, suffix) => {
@@ -24,22 +28,30 @@ const resubscribeAll = (client) => {
     });
   };
 
-  rebuild(topicRegistry, '');
-  rebuild(typingRegistry, '/typing');
-  rebuild(readRegistry, '/read');
+  rebuild(topicRegistry, "");
+  rebuild(typingRegistry, "/typing");
+  rebuild(readRegistry, "/read");
+  // Notifications — one subscription per user, not per conversation
+  if (notificationRegistry.listeners.size > 0) {
+    notificationRegistry.subscription = client.subscribe(
+      "/user/queue/notifications",
+      (frame) => {
+        const body = JSON.parse(frame.body);
+        notificationRegistry.listeners.forEach((cb) => cb(body));
+      },
+    );
+  }
 };
 
 const ensureClient = () => {
   if (stompClient) return stompClient;
 
-  const wsBaseUrl = import.meta.env.VITE_API_BASE_URL.replace('/api', '');
+  const wsBaseUrl = import.meta.env.VITE_API_BASE_URL.replace("/api", "");
   const token = useAuthStore.getState().token;
 
   stompClient = new Client({
     webSocketFactory: () =>
-      new SockJS(
-        `${wsBaseUrl}/ws?token=${encodeURIComponent(token)}`
-      ),
+      new SockJS(`${wsBaseUrl}/ws?token=${encodeURIComponent(token)}`),
 
     reconnectDelay: 5000,
   });
@@ -68,12 +80,7 @@ const runWhenConnected = (fn) => {
   }
 };
 
-const genericSubscribe = (
-  registry,
-  suffix,
-  conversationId,
-  callback
-) => {
+const genericSubscribe = (registry, suffix, conversationId, callback) => {
   const client = ensureClient();
 
   let entry = registry.get(conversationId);
@@ -112,13 +119,37 @@ const genericSubscribe = (
 };
 
 export const subscribeToConversation = (conversationId, callback) =>
-  genericSubscribe(topicRegistry, '', conversationId, callback);
+  genericSubscribe(topicRegistry, "", conversationId, callback);
 
 export const subscribeToTyping = (conversationId, callback) =>
-  genericSubscribe(typingRegistry, '/typing', conversationId, callback);
+  genericSubscribe(typingRegistry, "/typing", conversationId, callback);
 
 export const subscribeToReadReceipts = (conversationId, callback) =>
-  genericSubscribe(readRegistry, '/read', conversationId, callback);
+  genericSubscribe(readRegistry, "/read", conversationId, callback);
+export const subscribeToNotifications = (callback) => {
+  const client = ensureClient();
+
+  notificationRegistry.listeners.add(callback);
+
+  if (client.connected && !notificationRegistry.subscription) {
+    notificationRegistry.subscription = client.subscribe(
+      "/user/queue/notifications",
+      (frame) => {
+        const body = JSON.parse(frame.body);
+        notificationRegistry.listeners.forEach((cb) => cb(body));
+      },
+    );
+  }
+
+  return () => {
+    notificationRegistry.listeners.delete(callback);
+
+    if (notificationRegistry.listeners.size === 0) {
+      notificationRegistry.subscription?.unsubscribe();
+      notificationRegistry.subscription = null;
+    }
+  };
+};
 
 export const sendChatMessage = (conversationId, text) => {
   runWhenConnected((client) => {
@@ -135,7 +166,7 @@ export const sendTypingEvent = (conversationId) => {
   runWhenConnected((client) => {
     client.publish({
       destination: `/app/chat/${conversationId}/typing`,
-      body: '{}',
+      body: "{}",
     });
   });
 };
@@ -144,7 +175,7 @@ export const sendReadEvent = (conversationId) => {
   runWhenConnected((client) => {
     client.publish({
       destination: `/app/chat/${conversationId}/read`,
-      body: '{}',
+      body: "{}",
     });
   });
 };

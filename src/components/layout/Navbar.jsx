@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Bell, ChevronDown, Menu, X } from "lucide-react";
 import { useAuthStore } from "../../features/auth/authStore";
+import { useNotifications } from "../../features/notifications/hooks/useNotifications";
+import NotificationPanel from "../../features/notifications/components/NotificationPanel";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -28,6 +30,34 @@ function Navbar() {
     setMenuOpen(false);
     setMobileOpen(false);
     navigate("/login");
+  };
+
+  const [notifOpen, setNotifOpen] = useState(false);
+  const notifRef = useRef(null);
+  const {
+    notifications,
+    unreadCount,
+    isLoading: notifLoading,
+    markAllAsRead,
+  } = useNotifications();
+
+  useEffect(() => {
+    if (!notifOpen) return;
+    function handleClickOutside(event) {
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+        setNotifOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [notifOpen]);
+
+  const handleNotifToggle = () => {
+    setNotifOpen((o) => {
+      const next = !o;
+      if (next && unreadCount > 0) markAllAsRead();
+      return next;
+    });
   };
 
   const primaryLinks = isGig
@@ -75,12 +105,28 @@ function Navbar() {
         <div className="flex items-center gap-3">
           {token ? (
             <>
-              <button
-                className="hidden md:flex text-muted hover:text-primary transition-all duration-200 hover:scale-110 active:scale-95"
-                aria-label="Notifications"
-              >
-                <Bell size={20} />
-              </button>
+              <div className="relative hidden md:block" ref={notifRef}>
+                <button
+                  onClick={handleNotifToggle}
+                  className="relative flex text-muted hover:text-primary transition-all duration-200 hover:scale-110 active:scale-95"
+                  aria-label="Notifications"
+                >
+                  <Bell size={20} />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 bg-error text-white text-[10px] font-bold min-w-4 h-4 px-0.5 rounded-full flex items-center justify-center">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
+                </button>
+
+                {notifOpen && (
+                  <NotificationPanel
+                    notifications={notifications}
+                    isLoading={notifLoading}
+                    onClose={() => setNotifOpen(false)}
+                  />
+                )}
+              </div>
 
               <div className="relative hidden md:block" ref={menuRef}>
                 <button
