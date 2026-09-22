@@ -1,8 +1,6 @@
-import { Link } from 'react-router-dom';
-
-import AuthLayout from '../components/layout/AuthLayout';
-
-import LoginForm from '../features/auth/components/LoginForm';
+import { Link } from "react-router-dom";
+import AuthLayout from "../components/layout/AuthLayout";
+import LoginForm from "../features/auth/components/LoginForm";
 
 function LoginPage() {
   return (
@@ -15,8 +13,8 @@ function LoginPage() {
       description="Connect with the right people, discover new opportunities, and keep your projects moving forward."
       footer={
         <div className="space-y-2 text-center">
-          <p className="text-xs font-body text-faint">
-            Don't have an account?{' '}
+          <p className="text-xs font-body text-muted">
+            Don't have an account?{" "}
             <Link
               to="/signup"
               className="text-primary font-semibold hover:underline"
@@ -25,12 +23,18 @@ function LoginPage() {
             </Link>
           </p>
 
-          <p className="text-xs font-body text-faint">
+          <p className="text-xs font-body text-muted">
             <Link
               to="/forgot-password"
               className="text-primary font-semibold hover:underline"
             >
               Forgot password?
+            </Link>
+          </p>
+
+          <p className="text-xs font-body text-faint">
+            <Link to="/admin/login" className="hover:text-muted transition">
+              Admin login
             </Link>
           </p>
         </div>
