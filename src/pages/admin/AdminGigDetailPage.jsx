@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useAdminGig } from '../../features/admin/hooks/useAdminEntities';
+import AdminBackButton from '../../features/admin/components/AdminBackButton';
 
 function AdminGigDetailPage() {
   const { id } = useParams();
@@ -10,6 +11,7 @@ function AdminGigDetailPage() {
 
   return (
     <div className="max-w-lg">
+      <AdminBackButton />
       <h1 className="font-display text-2xl font-bold text-ink mb-1">{gig.title}</h1>
       <p className="text-sm font-body text-muted mb-6">
         {gig.owner?.firstName} {gig.owner?.lastName} · {gig.owner?.email}

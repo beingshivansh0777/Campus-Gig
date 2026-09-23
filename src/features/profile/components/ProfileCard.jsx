@@ -1,5 +1,6 @@
 import { useProfile } from '../hooks/useProfile';
 import { Mail, Phone, Star, Calendar } from 'lucide-react';
+import Avatar from '../../../components/ui/Avatar';
 
 function ProfileCard() {
   const { data: profile, isLoading, isError } = useProfile();
@@ -20,7 +21,7 @@ function ProfileCard() {
     <div className="bg-surface border border-border rounded-xl p-6">
       <div className="flex items-center gap-4">
         <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center font-display font-bold text-2xl">
-          {profile.firstName?.[0]}
+          <Avatar src={profile.profileImage} name={profile.firstName} size="lg" />
         </div>
         <div>
           <h2 className="font-display font-bold text-lg text-ink">

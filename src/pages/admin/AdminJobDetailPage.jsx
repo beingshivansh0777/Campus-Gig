@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useAdminJob } from '../../features/admin/hooks/useAdminEntities';
+import AdminBackButton from '../../features/admin/components/AdminBackButton';
 
 function AdminJobDetailPage() {
   const { id } = useParams();
@@ -10,6 +11,7 @@ function AdminJobDetailPage() {
 
   return (
     <div className="max-w-lg">
+      <AdminBackButton />
       <h1 className="font-display text-2xl font-bold text-ink mb-1">{job.title}</h1>
       <p className="text-sm font-body text-muted mb-6">
         Posted by {job.clientResponseDTO?.firstName} {job.clientResponseDTO?.lastName}

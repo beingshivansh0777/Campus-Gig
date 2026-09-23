@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useAdminClient } from '../../features/admin/hooks/useAdminEntities';
+import AdminBackButton from '../../features/admin/components/AdminBackButton';
 
 function AdminClientDetailPage() {
   const { id } = useParams();
@@ -10,6 +11,7 @@ function AdminClientDetailPage() {
 
   return (
     <div className="max-w-lg">
+      <AdminBackButton />
       <h1 className="font-display text-2xl font-bold text-ink mb-6">
         {client.firstName} {client.lastName}
       </h1>

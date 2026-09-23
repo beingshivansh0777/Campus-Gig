@@ -1,8 +1,10 @@
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
-import { Mail, Phone, Calendar, User } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { Mail, Phone, Calendar, User, Camera } from 'lucide-react';
 import { useProfile } from '../hooks/useProfile';
 import { useUpdateProfile } from '../hooks/useUpdateProfile';
+import { useUploadProfileImage } from '../hooks/useUploadProfileImage';
+import Avatar from '../../../components/ui/Avatar';
 
 const fieldClass =
   'w-full border border-border bg-surface rounded-lg pl-9 pr-3 py-2.5 font-body text-sm text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition';
@@ -10,10 +12,11 @@ const fieldClass =
 function EditProfileForm() {
   const { data: profile, isLoading } = useProfile();
   const updateProfile = useUpdateProfile();
+  const uploadImage = useUploadProfileImage();
+  const fileInputRef = useRef(null);
 
   const { register, handleSubmit, reset } = useForm();
 
-  // Pre-fill the form once profile data arrives
   useEffect(() => {
     if (profile) {
       reset({
@@ -28,12 +31,45 @@ function EditProfileForm() {
 
   const onSubmit = (data) => updateProfile.mutate(data);
 
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) uploadImage.mutate(file);
+  };
+
   if (isLoading) {
     return <div className="animate-pulse h-64 bg-border/30 rounded-lg" />;
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div className="flex items-center gap-4 pb-2">
+        <div className="relative">
+          <Avatar src={profile?.profileImage} name={profile?.firstName} size="lg" />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploadImage.isPending}
+            className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center border-2 border-surface hover:bg-primary-hover transition disabled:opacity-50"
+            aria-label="Change profile picture"
+          >
+            <Camera size={13} />
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+        </div>
+        <div>
+          <p className="text-sm font-body font-medium text-ink">Profile Picture</p>
+          <p className="text-xs font-body text-muted">
+            {uploadImage.isPending ? 'Uploading...' : 'Click the camera icon to change'}
+          </p>
+        </div>
+      </div>
+
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="block text-xs font-body font-medium text-ink mb-1.5">First Name</label>
