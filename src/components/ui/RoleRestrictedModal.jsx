@@ -2,7 +2,7 @@ import { Lock } from 'lucide-react';
 
 function RoleRestrictedModal({ message, onClose }) {
   return (
-    <div className="fixed inset-0 bg-ink/40 backdrop-blur-sm flex items-center justify-center p-4 z-[70]">
+    <div className="fixed inset-0 bg-ink/40 backdrop-blur-sm flex items-center justify-center p-4 z-70">
       <div className="bg-surface rounded-xl border border-border w-full max-w-sm p-6 text-center">
         <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
           <Lock size={20} />
