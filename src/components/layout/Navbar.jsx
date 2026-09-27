@@ -47,6 +47,7 @@ function Navbar() {
     notifications,
     unreadCount,
     isLoading: notifLoading,
+    markAsRead,
     markAllAsRead,
   } = useNotifications();
 
@@ -76,11 +77,7 @@ function Navbar() {
   }, [mobileNotifOpen]);
 
   const handleNotifToggle = (setter, current) => {
-    setter(() => {
-      const next = !current;
-      if (next && unreadCount > 0) markAllAsRead();
-      return next;
-    });
+    setter(!current);
   };
 
   const primaryLinks = isGig
@@ -149,6 +146,7 @@ function Navbar() {
                       notifications={notifications}
                       isLoading={notifLoading}
                       onClose={() => setNotifOpen(false)}
+                      onMarkAsRead={markAsRead}
                     />
                   )}
                 </div>
@@ -224,6 +222,7 @@ function Navbar() {
                           notifications={notifications}
                           isLoading={notifLoading}
                           onClose={() => setMobileNotifOpen(false)}
+                          onMarkAsRead={markAsRead}
                         />
                       </div>
                     )}
