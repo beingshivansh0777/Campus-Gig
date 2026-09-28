@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Bell, ChevronDown, X } from "lucide-react";
 import { useAuthStore } from "../../features/auth/authStore";
 import { useNotifications } from "../../features/notifications/hooks/useNotifications";
 import NotificationPanel from "../../features/notifications/components/NotificationPanel";
