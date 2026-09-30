@@ -14,8 +14,6 @@ export const useLogin = () => {
     mutationFn: authApi.login,
 
     onSuccess: async (response) => {
-      console.log("LOGIN SUCCESS:", response.data);
-
       const token = response.data["Access Token"];
 
       setToken(token);
