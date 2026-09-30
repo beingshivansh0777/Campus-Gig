@@ -17,6 +17,7 @@ function AuthLayout({
 
         {/* Decorative glow blobs */}
         <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-accent-pink opacity-20 blur-3xl" />
+
         <div className="absolute -bottom-32 -left-16 w-96 h-96 rounded-full bg-primary opacity-25 blur-3xl" />
 
         {/* Subtle dot-grid overlay */}
@@ -52,6 +53,7 @@ function AuthLayout({
           <h2 className="font-display text-5xl xl:text-6xl font-bold text-white leading-[1.05] tracking-tight max-w-2xl">
             {heading}
             <br />
+
             <span className="bg-linear-to-r from-primary to-accent-pink bg-clip-text text-transparent">
               {highlightedHeading}
             </span>
@@ -81,27 +83,33 @@ function AuthLayout({
       <div className="flex-1 flex items-center justify-center bg-background px-4 py-12">
         <div className="w-full max-w-sm">
 
+          {/* Page title */}
           <h1 className="font-display text-3xl font-extrabold text-[#5a2bb1] mb-1 tracking-tight">
             {title}
           </h1>
 
+          {/* Subtitle */}
           {subtitle && (
             <p className="font-body text-sm text-faint mb-7">
               {subtitle}
             </p>
           )}
 
-          <div className="bg-white border border-border rounded-xl p-6 shadow-sm">
+          {/* Main form box */}
+          <div className="bg-white border border-border rounded-md p-6 shadow-sm">
             {children}
           </div>
 
-          {footer && <div className="mt-6">{footer}</div>}
+          {/* Footer */}
+          {footer && (
+            <div className="mt-6">
+              {footer}
+            </div>
+          )}
         </div>
       </div>
-
     </div>
   );
 }
 
 export default AuthLayout;
-

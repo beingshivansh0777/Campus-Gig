@@ -9,9 +9,8 @@ export const useNotifications = () => {
   const queryClient = useQueryClient();
   const [liveNotifications, setLiveNotifications] = useState([]);
   const seenIds = useRef(new Set());
-  /*
-   * Fetch notifications
-   */
+
+  /* * Fetch notifications */
   const { data, isLoading } = useQuery({
     queryKey: ["notifications"],
 
