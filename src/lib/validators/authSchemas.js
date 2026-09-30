@@ -5,9 +5,8 @@ export const signupSchema = z.object({
   lastName: z.string().min(1, 'Last name is required'),
   email: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
   phoneNumber: z
-    .string()
-    .min(10, 'Phone number must be at least 10 digits')
-    .regex(/^\d+$/, 'Phone number should only contain digits'),
+  .string()
+  .regex(/^[6-9]\d{9}$/, 'Phone number must be exactly 10 digits and start with 6-9'),
   dob: z.string().min(1, 'Date of birth is required'),
   password: z
     .string()

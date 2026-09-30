@@ -1,10 +1,22 @@
 import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 function ContactPage() {
   const navigate = useNavigate();
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
+      {/* Back To Home */}
+      <button
+        type="button"
+        onClick={() => navigate("/")}
+        className="inline-flex items-center gap-2 text-sm font-body text-muted hover:text-ink transition-colors duration-200 mb-10"
+      >
+        <ArrowLeft size={17} />
+        Back To Home
+      </button>
+
+      {/* Header */}
       <p className="text-xs font-body font-semibold text-primary uppercase tracking-wide mb-2">
         Contact &amp; Support
       </p>
@@ -19,6 +31,7 @@ function ContactPage() {
         you.
       </p>
 
+      {/* Support Options */}
       <div className="space-y-4 mb-8">
         {/* General Support */}
         <div className="bg-surface border border-border rounded-xl p-5">
@@ -32,8 +45,7 @@ function ContactPage() {
 
           <p className="font-body text-sm text-muted leading-relaxed mb-4">
             Get assistance with account-related questions, profiles, gigs,
-            proposals, contracts, notifications, and other Campus-GIG
-            features.
+            proposals, contracts, notifications, and other Campus-GIG features.
           </p>
 
           <button
@@ -71,6 +83,7 @@ function ContactPage() {
         </div>
       </div>
 
+      {/* Before Contacting Support */}
       <h2 className="font-display text-lg font-bold text-ink mb-2">
         Before Contacting Support
       </h2>
@@ -81,13 +94,14 @@ function ContactPage() {
         relevant account or activity.
       </p>
 
+      {/* Response Information */}
       <h2 className="font-display text-lg font-bold text-ink mb-2">
         Response Information
       </h2>
 
       <p className="font-body text-sm text-muted leading-relaxed">
-        Support requests are reviewed during our operating hours. Response
-        times may vary depending on the nature and complexity of your request.
+        Support requests are reviewed during our operating hours. Response times
+        may vary depending on the nature and complexity of your request.
       </p>
     </div>
   );
