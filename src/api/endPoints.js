@@ -63,6 +63,11 @@ export const ENDPOINTS = {
   reports: {
     create: "/report/report",
   },
+  technicalSupport: {
+  create: "/technical-support/technical-support",
+  list: "/technical-support/technical-supports",
+  byId: (id) => `/technical-support/technical-support/${id}`,
+},
   admin: {
     register: "/admin/register",
     login: "/admin/login",

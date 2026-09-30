@@ -29,6 +29,8 @@ import FAQPage from "../pages/FAQPage";
 import HowItWorksPage from "../pages/HowItWorksPage";
 import TermsPage from "../pages/TermsPage";
 import PrivacyPage from "../pages/PrivacyPage";
+import TechnicalIssuePage from "../pages/TechnicalIssuePage";
+import GetSupportPage from "../pages/GetSupportPage";
 
 // Admin
 
@@ -66,10 +68,7 @@ function AppRoutes() {
       {/* Admin panel — completely separate from the regular AppLayout */}
       <Route element={<AdminProtectedRoute />}>
         <Route element={<AdminLayout />}>
-          <Route
-            path="/admin/dashboard"
-            element={<AdminDashboardPage />}
-          />
+          <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
 
           <Route path="/admin/clients" element={<AdminClientsPage />} />
 
@@ -80,17 +79,11 @@ function AppRoutes() {
 
           <Route path="/admin/gigs" element={<AdminGigsPage />} />
 
-          <Route
-            path="/admin/gigs/:id"
-            element={<AdminGigDetailPage />}
-          />
+          <Route path="/admin/gigs/:id" element={<AdminGigDetailPage />} />
 
           <Route path="/admin/jobs" element={<AdminJobsPage />} />
 
-          <Route
-            path="/admin/jobs/:id"
-            element={<AdminJobDetailPage />}
-          />
+          <Route path="/admin/jobs/:id" element={<AdminJobDetailPage />} />
 
           <Route
             path="/admin/job-applications"
@@ -125,32 +118,24 @@ function AppRoutes() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
+          <Route
+            path="/contact/technical-issue"
+            element={<TechnicalIssuePage />}
+          />
+          <Route path="/get-support" element={<GetSupportPage />} />
           <Route path="/jobs" element={<JobListingPage />} />
           <Route path="/jobs/create" element={<CreateJobPage />} />
           <Route path="/proposals" element={<MyProposalsPage />} />
           <Route path="/contracts" element={<MyContractsPage />} />
-          <Route path="/jobs/create" element={<CreateJobPage />} />
           <Route path="/jobs/my-jobs" element={<MyJobsPage />} />
           <Route path="/jobs/drafts" element={<DraftsPage />} />
-          <Route
-            path="/jobs/drafts/:draftId"
-            element={<EditDraftPage />}
-          />
+          <Route path="/jobs/drafts/:draftId" element={<EditDraftPage />} />
 
-          <Route
-            path="/jobs/edit/:jobId"
-            element={<EditJobPage />}
-          />
+          <Route path="/jobs/edit/:jobId" element={<EditJobPage />} />
 
-          <Route
-            path="/jobs/manage/:jobId"
-            element={<ManageJobPage />}
-          />
+          <Route path="/jobs/manage/:jobId" element={<ManageJobPage />} />
 
-          <Route
-            path="/jobs/:jobId"
-            element={<JobDetailPage />}
-          />
+          <Route path="/jobs/:jobId" element={<JobDetailPage />} />
 
           <Route path="/saved-jobs" element={<SavedJobsPage />} />
 
@@ -166,10 +151,7 @@ function AppRoutes() {
             element={<ContractDetailPage />}
           />
 
-          <Route
-            path="/gigs/:gigId"
-            element={<GigProfileViewPage />}
-          />
+          <Route path="/gigs/:gigId" element={<GigProfileViewPage />} />
         </Route>
       </Route>
 
