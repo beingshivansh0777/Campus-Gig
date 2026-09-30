@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
+
 import { Link } from 'react-router-dom';
+
 import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   ArrowRight,
   Code2,
@@ -14,8 +17,8 @@ import {
   Handshake,
   PartyPopper,
 } from 'lucide-react';
-import { useAuthStore } from '../features/auth/authStore';
 
+import { useAuthStore } from '../features/auth/authStore';
 
 const rotatingWords = ['developers.', 'designers.', 'writers.', 'editors.', 'creators.'];
 
@@ -73,32 +76,67 @@ const stats = [
 ];
 
 const howItWorks = [
-  { icon: FileEdit, title: 'Post Project', desc: 'Describe what you need and set a budget.' },
-  { icon: Inbox, title: 'Receive Proposals', desc: 'Students on your campus send you bids.' },
-  { icon: ListChecks, title: 'Compare Talent', desc: 'Review profiles, skills, and past work.' },
-  { icon: Handshake, title: 'Hire', desc: 'Pick your favorite and lock it in.' },
-  { icon: PartyPopper, title: 'Get It Done', desc: 'Work gets delivered, right on campus.' },
+  {
+    icon: FileEdit,
+    title: 'Post Project',
+    desc: 'Describe what you need and set a budget.',
+  },
+  {
+    icon: Inbox,
+    title: 'Receive Proposals',
+    desc: 'Students on your campus send you bids.',
+  },
+  {
+    icon: ListChecks,
+    title: 'Compare Talent',
+    desc: 'Review profiles, skills, and past work.',
+  },
+  {
+    icon: Handshake,
+    title: 'Hire',
+    desc: 'Pick your favorite and lock it in.',
+  },
+  {
+    icon: PartyPopper,
+    title: 'Get It Done',
+    desc: 'Work gets delivered, right on campus.',
+  },
 ];
 
 function HomePage() {
   const token = useAuthStore((state) => state.token);
+  const isGig = useAuthStore((state) => state.isGig);
+
   const [wordIndex, setWordIndex] = useState(0);
+  const [mobileCardIndex, setMobileCardIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setWordIndex((i) => (i + 1) % rotatingWords.length);
     }, 2200);
+
     return () => clearInterval(interval);
   }, []);
-
-  const [mobileCardIndex, setMobileCardIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setMobileCardIndex((i) => (i + 1) % previewCards.length);
     }, 3000);
+
     return () => clearInterval(interval);
   }, []);
+
+  // Role-based routing for Home Page actions.
+  // Logged-out users go to signup.
+  // GIG users go to Find Work.
+  // CLIENT users go to My Jobs.
+  const getRoleBasedRoute = () => {
+    if (!token) {
+      return '/signup';
+    }
+
+    return isGig ? '/jobs' : '/jobs/my-jobs';
+  };
 
   return (
     <div className="relative overflow-hidden">
@@ -106,9 +144,11 @@ function HomePage() {
       <div
         className="absolute inset-0 -z-10 opacity-[0.5]"
         style={{
-          backgroundImage: 'radial-gradient(circle, #E4D9F7 1px, transparent 1px)',
+          backgroundImage:
+            'radial-gradient(circle, #E4D9F7 1px, transparent 1px)',
           backgroundSize: '24px 24px',
-          maskImage: 'linear-gradient(to bottom, black, transparent 80%)',
+          maskImage:
+            'linear-gradient(to bottom, black, transparent 80%)',
         }}
       />
 
@@ -129,6 +169,7 @@ function HomePage() {
 
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-ink leading-[1.1] sm:leading-[1.05] tracking-tight mb-5 wrap-break-word">
             <span className="block">Find campus</span>
+
             <span className="block relative h-[1.1em] sm:h-[1.05em] overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.span
@@ -143,12 +184,13 @@ function HomePage() {
                 </motion.span>
               </AnimatePresence>
             </span>
+
             Get work done.
           </h1>
 
           <p className="font-body text-base sm:text-lg text-muted max-w-md mb-8 leading-relaxed">
-            Post a project, receive proposals from skilled students, compare bids and hire with
-            confidence — all within your campus.
+            Post a project, receive proposals from skilled students, compare
+            bids and hire with confidence — all within your campus.
           </p>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -158,10 +200,14 @@ function HomePage() {
             >
               <Briefcase size={16} />
               Post a Project
-              <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight
+                size={16}
+                className="group-hover:translate-x-0.5 transition-transform"
+              />
             </Link>
+
             <Link
-              to={token ? '/jobs' : '/signup'}
+              to={getRoleBasedRoute()}
               className="bg-white text-ink font-body font-semibold text-sm px-5 sm:px-6 py-3 rounded-lg border border-border hover:border-primary/40 hover:text-primary transition-colors"
             >
               Browse Talent
@@ -182,12 +228,17 @@ function HomePage() {
                 key={card.title}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
+                transition={{
+                  duration: 0.4,
+                  delay: 0.3 + i * 0.1,
+                }}
                 whileHover={{ scale: 1.03, x: 4 }}
-                style={{ marginLeft: `${i % 2 === 0 ? 0 : 32}px` }}
+                style={{
+                  marginLeft: `${i % 2 === 0 ? 0 : 32}px`,
+                }}
               >
                 <Link
-                  to={token ? '/jobs' : '/signup'}
+                  to={getRoleBasedRoute()}
                   className="bg-white border border-border rounded-xl p-4 flex items-center gap-4 shadow-sm hover:shadow-lg hover:border-primary/30 transition-shadow"
                 >
                   <div
@@ -195,13 +246,21 @@ function HomePage() {
                   >
                     <card.icon size={18} />
                   </div>
+
                   <div className="min-w-0">
                     <p className="font-body font-semibold text-sm text-ink truncate">
                       {card.title}
                     </p>
+
                     <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-xs font-mono text-muted">{card.budget}</span>
-                      <span className="text-xs font-body text-faint">·</span>
+                      <span className="text-xs font-mono text-muted">
+                        {card.budget}
+                      </span>
+
+                      <span className="text-xs font-body text-faint">
+                        ·
+                      </span>
+
                       <span
                         className={`text-xs font-body font-medium bg-linear-to-r ${card.accent} bg-clip-text text-transparent`}
                       >
@@ -215,8 +274,7 @@ function HomePage() {
           </div>
         </motion.div>
 
-        {/* Mobile-only preview carousel — one full card visible at a time */}
-               {/* Mobile-only preview carousel — auto-rolls every few seconds */}
+        {/* Mobile-only preview carousel */}
         <div className="lg:hidden">
           <div className="relative h-24 overflow-hidden">
             <AnimatePresence mode="wait">
@@ -225,30 +283,41 @@ function HomePage() {
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -40 }}
-                transition={{ duration: 0.4, ease: 'easeOut' }}
+                transition={{
+                  duration: 0.4,
+                  ease: 'easeOut',
+                }}
                 className="absolute inset-0"
               >
                 <Link
-                  to={token ? '/jobs' : '/signup'}
+                  to={getRoleBasedRoute()}
                   className="bg-white border border-border rounded-xl p-4 flex items-center gap-4 shadow-sm active:scale-[0.98] transition-transform h-full"
                 >
                   <div
                     className={`w-11 h-11 rounded-lg flex items-center justify-center shrink-0 ${previewCards[mobileCardIndex].tint}`}
                   >
                     {(() => {
-                      const Icon = previewCards[mobileCardIndex].icon;
+                      const Icon =
+                        previewCards[mobileCardIndex].icon;
+
                       return <Icon size={18} />;
                     })()}
                   </div>
+
                   <div className="min-w-0">
                     <p className="font-body font-semibold text-sm text-ink truncate">
                       {previewCards[mobileCardIndex].title}
                     </p>
+
                     <div className="flex items-center gap-2 mt-0.5">
                       <span className="text-xs font-mono text-muted">
                         {previewCards[mobileCardIndex].budget}
                       </span>
-                      <span className="text-xs font-body text-faint">·</span>
+
+                      <span className="text-xs font-body text-faint">
+                        ·
+                      </span>
+
                       <span
                         className={`text-xs font-body font-medium bg-linear-to-r ${previewCards[mobileCardIndex].accent} bg-clip-text text-transparent`}
                       >
@@ -260,13 +329,16 @@ function HomePage() {
               </motion.div>
             </AnimatePresence>
           </div>
+
           {/* Dots — active one highlighted */}
           <div className="flex justify-center gap-1.5 mt-3">
             {previewCards.map((card, i) => (
               <span
                 key={card.title}
                 className={`h-1.5 rounded-full transition-all ${
-                  i === mobileCardIndex ? 'w-4 bg-primary' : 'w-1.5 bg-border'
+                  i === mobileCardIndex
+                    ? 'w-4 bg-primary'
+                    : 'w-1.5 bg-border'
                 }`}
               />
             ))}
@@ -286,6 +358,7 @@ function HomePage() {
           <span className="text-xs font-body font-semibold tracking-wider text-primary uppercase">
             How it works
           </span>
+
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink mt-2">
             Five steps. Zero hassle.
           </h2>
@@ -301,17 +374,25 @@ function HomePage() {
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
+              transition={{
+                duration: 0.4,
+                delay: i * 0.08,
+              }}
               whileHover={{ y: -3 }}
               className="relative flex flex-col items-center text-center"
             >
               <div className="relative z-10 w-12 h-12 rounded-full bg-white border-2 border-primary/20 flex items-center justify-center mb-3 shadow-sm">
                 <step.icon size={18} className="text-primary" />
+
                 <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-linear-to-br from-primary to-accent-pink text-white text-[10px] font-bold flex items-center justify-center">
                   {i + 1}
                 </span>
               </div>
-              <p className="font-body font-semibold text-sm text-ink">{step.title}</p>
+
+              <p className="font-body font-semibold text-sm text-ink">
+                {step.title}
+              </p>
+
               <p className="text-xs font-body text-muted mt-1 leading-snug max-w-36">
                 {step.desc}
               </p>
@@ -334,6 +415,7 @@ function HomePage() {
               >
                 {stat.label}
               </p>
+
               <p className="text-[10px] sm:text-sm font-body text-muted mt-1 leading-tight">
                 {stat.caption}
               </p>
