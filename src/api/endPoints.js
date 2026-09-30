@@ -64,26 +64,36 @@ export const ENDPOINTS = {
     create: "/report/report",
   },
   technicalSupport: {
-  create: "/technical-support/technical-support",
-  list: "/technical-support/technical-supports",
-  byId: (id) => `/technical-support/technical-support/${id}`,
-},
+    create: "/technical-support/technical-support",
+    list: "/technical-support/technical-supports",
+    byId: (id) => `/technical-support/technical-support/${id}`,
+  },
   admin: {
     register: "/admin/register",
     login: "/admin/login",
-    mail: "/admin/mail",
+
     stats: "/admin/stats",
     growthChart: "/admin/growth-chart",
     popularJob: "/admin/popular-job",
+
     reports: "/admin/reports",
     report: "/admin/report",
+
     jobs: "/admin/jobs",
     job: "/admin/job",
+
     jobApplications: "/admin/job-applications",
     jobApplication: "/admin/job-application",
+
     gigs: "/admin/gigs",
     gig: "/admin/gig",
+
     clients: "/admin/clients",
     client: "/admin/client",
+
+    adminAccess: "/admin/admin-access",
+
+    technicalSupports: "/admin/technical-supports",
+    technicalSupport: "/admin/technical-support",
   },
 };

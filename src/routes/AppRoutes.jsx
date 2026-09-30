@@ -49,6 +49,8 @@ import AdminJobApplicationsPage from "../pages/admin/AdminJobApplicationsPage";
 import AdminJobApplicationDetailPage from "../pages/admin/AdminJobApplicationDetailPage";
 import AdminReportsPage from "../pages/admin/AdminReportsPage";
 import AdminReportDetailPage from "../pages/admin/AdminReportDetailPage";
+import AdminTechnicalSupportPage from "../pages/admin/AdminTechnicalSupportPage";
+import AdminTechnicalSupportDetailPage from "../pages/admin/AdminTechnicalSupportDetailPage";
 
 function AppRoutes() {
   return (
@@ -100,6 +102,17 @@ function AppRoutes() {
           <Route
             path="/admin/reports/:id"
             element={<AdminReportDetailPage />}
+          />
+
+          {/* Technical Support */}
+          <Route
+            path="/admin/technical-support"
+            element={<AdminTechnicalSupportPage />}
+          />
+
+          <Route
+            path="/admin/technical-support/:id"
+            element={<AdminTechnicalSupportDetailPage />}
           />
         </Route>
       </Route>

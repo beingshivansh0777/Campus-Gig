@@ -1,15 +1,54 @@
-import { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Users, Briefcase, FileText, Flag, LogOut, Bot, X } from 'lucide-react';
-import { useAdminAuthStore } from '../adminAuthStore';
+import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate, useLocation, Outlet } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Users,
+  Briefcase,
+  FileText,
+  Flag,
+  LogOut,
+  Bot,
+  X,
+  LifeBuoy,
+} from "lucide-react";
+import { useAdminAuthStore } from "../adminAuthStore";
 
 const NAV_ITEMS = [
-  { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/admin/clients', label: 'Clients', icon: Users },
-  { to: '/admin/gigs', label: 'Gigs', icon: Bot },
-  { to: '/admin/jobs', label: 'Jobs', icon: Briefcase },
-  { to: '/admin/job-applications', label: 'Applications', icon: FileText },
-  { to: '/admin/reports', label: 'Reports', icon: Flag },
+  {
+    to: "/admin/dashboard",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    to: "/admin/clients",
+    label: "Clients",
+    icon: Users,
+  },
+  {
+    to: "/admin/gigs",
+    label: "Gigs",
+    icon: Bot,
+  },
+  {
+    to: "/admin/jobs",
+    label: "Jobs",
+    icon: Briefcase,
+  },
+  {
+    to: "/admin/job-applications",
+    label: "Applications",
+    icon: FileText,
+  },
+  {
+    to: "/admin/reports",
+    label: "Reports",
+    icon: Flag,
+  },
+  {
+    to: "/admin/technical-support",
+    label: "Technical Support",
+    icon: LifeBuoy,
+  },
 ];
 
 function AdminLayout() {
@@ -20,16 +59,16 @@ function AdminLayout() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = drawerOpen ? 'hidden' : '';
+    document.body.style.overflow = drawerOpen ? "hidden" : "";
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [drawerOpen]);
 
   const handleLogout = () => {
     logout();
     setDrawerOpen(false);
-    navigate('/admin/login');
+    navigate("/admin/login");
   };
 
   const NavLinks = ({ onNavigate }) => (
@@ -42,7 +81,9 @@ function AdminLayout() {
             to={item.to}
             onClick={onNavigate}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-body transition ${
-              isActive ? 'bg-white/10 text-white font-semibold' : 'text-white/60 hover:bg-white/5 hover:text-white'
+              isActive
+                ? "bg-white/10 text-white font-semibold"
+                : "text-white/60 hover:bg-white/5 hover:text-white"
             }`}
           >
             <item.icon size={16} />
@@ -83,7 +124,7 @@ function AdminLayout() {
             className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center font-semibold text-sm"
             aria-label="Open admin menu"
           >
-            {admin?.name?.[0]?.toUpperCase() || 'A'}
+            {admin?.name?.[0]?.toUpperCase() || "A"}
           </button>
         </div>
 
@@ -96,14 +137,16 @@ function AdminLayout() {
       <div
         onClick={() => setDrawerOpen(false)}
         className={`md:hidden fixed inset-0 bg-black/60 z-40 transition-opacity duration-300 ${
-          drawerOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          drawerOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
         }`}
       />
       <div
         role="dialog"
         aria-modal="true"
         className={`md:hidden fixed top-0 right-0 h-full w-64 bg-ink text-white z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
-          drawerOpen ? 'translate-x-0' : 'translate-x-full'
+          drawerOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between px-4 h-14 border-b border-white/10 shrink-0">
