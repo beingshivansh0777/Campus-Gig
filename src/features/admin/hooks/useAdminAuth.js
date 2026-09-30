@@ -5,13 +5,9 @@ import {
 } from '@tanstack/react-query';
 
 import { useNavigate } from 'react-router-dom';
-
 import { adminApi } from '../api';
-
 import { useAdminAuthStore } from '../adminAuthStore';
-
 import { getErrorMessage } from '../../../lib/errorMessages';
-
 import toast from 'react-hot-toast';
 
 
@@ -50,6 +46,36 @@ export const useAdminRegister = () => {
       toast.success(
         'Registered — your access is pending approval.'
       );
+    },
+
+    onError: (error) => {
+      toast.error(getErrorMessage(error));
+    },
+  });
+};
+
+
+export const useAdminAccess = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, status }) =>
+      adminApi.adminAccess(id, status),
+
+    onSuccess: (_, variables) => {
+      if (variables.status === 'ALLOWED') {
+        toast.success('Admin approved successfully.');
+      } else {
+        toast.success('Admin access denied.');
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: ['adminPendingAdmins'],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ['adminApprovedAdmins'],
+      });
     },
 
     onError: (error) => {

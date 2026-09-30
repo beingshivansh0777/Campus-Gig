@@ -51,6 +51,7 @@ import AdminReportsPage from "../pages/admin/AdminReportsPage";
 import AdminReportDetailPage from "../pages/admin/AdminReportDetailPage";
 import AdminTechnicalSupportPage from "../pages/admin/AdminTechnicalSupportPage";
 import AdminTechnicalSupportDetailPage from "../pages/admin/AdminTechnicalSupportDetailPage";
+import AdminAccessPage from "../pages/admin/AdminAccessPage";
 
 function AppRoutes() {
   return (
@@ -104,7 +105,6 @@ function AppRoutes() {
             element={<AdminReportDetailPage />}
           />
 
-          {/* Technical Support */}
           <Route
             path="/admin/technical-support"
             element={<AdminTechnicalSupportPage />}
@@ -114,6 +114,9 @@ function AppRoutes() {
             path="/admin/technical-support/:id"
             element={<AdminTechnicalSupportDetailPage />}
           />
+
+          {/* Admin Access */}
+          <Route path="/admin/access" element={<AdminAccessPage />} />
         </Route>
       </Route>
 

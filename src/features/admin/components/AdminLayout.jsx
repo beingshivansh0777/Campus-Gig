@@ -10,6 +10,7 @@ import {
   Bot,
   X,
   LifeBuoy,
+  ShieldCheck,
 } from "lucide-react";
 import { useAdminAuthStore } from "../adminAuthStore";
 
@@ -49,6 +50,11 @@ const NAV_ITEMS = [
     label: "Technical Support",
     icon: LifeBuoy,
   },
+  {
+  to: '/admin/access',
+  label: 'Admin Access',
+  icon: ShieldCheck,
+},
 ];
 
 function AdminLayout() {
