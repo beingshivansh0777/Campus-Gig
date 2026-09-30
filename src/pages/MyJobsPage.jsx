@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useMyJobs } from '../features/jobs/hooks/useMyJobs';
-import JobCard from '../features/jobs/components/JobCard';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useMyJobs } from "../features/jobs/hooks/useMyJobs";
+import JobCard from "../features/jobs/components/JobCard";
 
 const TABS = [
-  { key: 'OPEN', label: 'Open' },
-  { key: 'CLOSED', label: 'Closed' },
+  { key: "OPEN", label: "Open" },
+  { key: "CLOSED", label: "Closed" },
 ];
 
 function MyJobsPage() {
-  const [status, setStatus] = useState('OPEN');
+  const [status, setStatus] = useState("OPEN");
   const [page, setPage] = useState(1);
   const { data, isLoading, isFetching } = useMyJobs(status, page);
 
@@ -17,15 +17,17 @@ function MyJobsPage() {
     setPage(1);
   }, [status]);
 
-  const jobs = data?.content ?? [];
-  const totalPages = data?.totalPages ?? 1;
+  const jobs = Array.isArray(data) ? data : [];;
+  const totalPages = 1;
 
   const goToPage = (p) => setPage(Math.min(Math.max(p, 1), totalPages));
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-        <h1 className="font-display text-2xl font-bold text-ink">My Projects</h1>
+        <h1 className="font-display text-2xl font-bold text-ink">
+          My Projects
+        </h1>
         <div className="flex items-center gap-3">
           <Link
             to="/jobs/drafts"
@@ -49,8 +51,8 @@ function MyJobsPage() {
             onClick={() => setStatus(tab.key)}
             className={`px-4 py-2.5 text-sm font-body font-medium border-b-2 transition-colors ${
               status === tab.key
-                ? 'border-primary text-primary'
-                : 'border-transparent text-faint hover:text-ink'
+                ? "border-primary text-primary"
+                : "border-transparent text-faint hover:text-ink"
             }`}
           >
             {tab.label}
@@ -61,7 +63,10 @@ function MyJobsPage() {
       {isLoading ? (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="animate-pulse h-24 bg-border/60 rounded-xl" />
+            <div
+              key={i}
+              className="animate-pulse h-24 bg-border/60 rounded-xl"
+            />
           ))}
         </div>
       ) : jobs.length === 0 ? (
@@ -78,9 +83,15 @@ function MyJobsPage() {
         </div>
       ) : (
         <>
-          <div className={`space-y-3 transition-opacity ${isFetching ? 'opacity-60' : 'opacity-100'}`}>
+          <div
+            className={`space-y-3 transition-opacity ${isFetching ? "opacity-60" : "opacity-100"}`}
+          >
             {jobs.map((job) => (
-              <JobCard key={job.id} job={job} linkTo={`/jobs/manage/${job.id}`} />
+              <JobCard
+                key={job.id}
+                job={job}
+                linkTo={`/jobs/manage/${job.id}`}
+              />
             ))}
           </div>
 
@@ -100,8 +111,8 @@ function MyJobsPage() {
                   onClick={() => goToPage(p)}
                   className={`w-8 h-8 text-sm font-body font-medium rounded-lg transition-colors ${
                     p === page
-                      ? 'bg-primary text-white'
-                      : 'text-faint hover:text-ink hover:bg-border/60'
+                      ? "bg-primary text-white"
+                      : "text-faint hover:text-ink hover:bg-border/60"
                   }`}
                 >
                   {p}
