@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState } from "react";
+
 import {
   Check,
   ShieldCheck,
@@ -6,447 +7,479 @@ import {
   Mail,
   Phone,
   CalendarDays,
-} from 'lucide-react';
+  Filter,
+  ChevronLeft,
+  ChevronRight,
+  Users,
+} from "lucide-react";
 
-import AdminTable from '../../features/admin/components/AdminTable';
-import { useAdminAccess } from '../../features/admin/hooks/useAdminAuth';
+import AdminTable from "../../features/admin/components/AdminTable";
 
-const INITIAL_PENDING_ADMINS = [
-  {
-    id: 101,
-    fullName: 'Test Admin',
-    email: 'testadmin@example.com',
-    contactNo: '9876543210',
-    adminAccessStatus: 'PENDING',
-    adminStatus: 'ACTIVE',
-    createdAt: new Date().toISOString(),
-  },
+import {
+  useAdminAccess,
+  useAdminAdmins,
+} from "../../features/admin/hooks/useAdminAuth";
+
+import { useAdminAuthStore } from "../../features/admin/adminAuthStore";
+
+const FILTER_OPTIONS = [
+  { label: "All Administrators", value: "" },
+  { label: "Allowed", value: "ALLOWED" },
+  { label: "Pending", value: "PENDING" },
+  { label: "Denied", value: "DENIED" },
 ];
 
-const INITIAL_APPROVED_ADMINS = [
-  {
-    id: 1,
-    fullName: 'Shivansh Mishra',
-    email: 'shivanshmishradev@gmail.com',
-    contactNo: '-',
-    adminAccessStatus: 'ALLOWED',
-    adminStatus: 'ACTIVE',
-    createdAt: new Date().toISOString(),
-  },
-];
+const STATUS_DOT = {
+  ALLOWED: "bg-emerald-400",
+  PENDING: "bg-amber-400",
+  DENIED: "bg-red-400",
+};
 
-const pendingColumns = [
-  {
-    key: 'fullName',
-    label: 'Name',
-  },
-  {
-    key: 'email',
-    label: 'Email',
-  },
-  {
-    key: 'contactNo',
-    label: 'Contact',
-    render: (row) => row.contactNo || '-',
-  },
-  {
-    key: 'adminAccessStatus',
-    label: 'Status',
-    render: (row) => (
-      <span className="font-medium text-ink">
-        {row.adminAccessStatus}
-      </span>
-    ),
-  },
-  {
-    key: 'createdAt',
-    label: 'Registered',
-    render: (row) =>
-      row.createdAt
-        ? new Date(row.createdAt).toLocaleDateString()
-        : '-',
-  },
-];
+const StatusBadge = ({ status }) => {
+  const styles = {
+    ALLOWED:
+      "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    PENDING:
+      "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    DENIED:
+      "bg-red-500/10 text-red-400 border-red-500/20",
+  };
 
-const approvedColumns = [
-  {
-    key: 'fullName',
-    label: 'Name',
-  },
-  {
-    key: 'email',
-    label: 'Email',
-  },
-  {
-    key: 'adminStatus',
-    label: 'Admin Status',
-    render: (row) => (
-      <span className="font-medium text-ink">
-        {row.adminStatus}
-      </span>
-    ),
-  },
-  {
-    key: 'adminAccessStatus',
-    label: 'Access',
-    render: (row) => (
-      <span className="font-medium text-ink">
-        {row.adminAccessStatus}
-      </span>
-    ),
-  },
-  {
-    key: 'createdAt',
-    label: 'Registered',
-    render: (row) =>
-      row.createdAt
-        ? new Date(row.createdAt).toLocaleDateString()
-        : '-',
-  },
-];
-
-function AdminAccessPage() {
-  const [pendingAdmins, setPendingAdmins] = useState(
-    INITIAL_PENDING_ADMINS
-  );
-
-  const [approvedAdmins, setApprovedAdmins] = useState(
-    INITIAL_APPROVED_ADMINS
-  );
-
-  const adminAccess = useAdminAccess();
-
-  const handleAccessUpdate = (admin, status) => {
-    adminAccess.mutate(
-      {
-        id: admin.id,
-        status,
-      },
-      {
-        onSuccess: () => {
-          setPendingAdmins((current) =>
-            current.filter((item) => item.id !== admin.id)
-          );
-
-          if (status === 'ALLOWED') {
-            setApprovedAdmins((current) => [
-              ...current,
-              {
-                ...admin,
-                adminAccessStatus: 'ALLOWED',
-              },
-            ]);
-          }
-        },
-      }
-    );
+  const labels = {
+    ALLOWED: "Allowed",
+    PENDING: "Pending",
+    DENIED: "Denied",
   };
 
   return (
-    <div>
-      {/* Page Header */}
-      <div className="mb-8">
-        <h1 className="font-display text-2xl font-bold text-ink">
-          Admin Access
-        </h1>
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${
+        styles[status] || "bg-border/40 text-muted border-border"
+      }`}
+    >
+      <span
+        className={`h-1.5 w-1.5 rounded-full ${
+          STATUS_DOT[status] || "bg-muted"
+        }`}
+      />
 
-        <p className="text-sm text-muted font-body mt-1">
-          Manage administrator access requests.
-        </p>
+      {labels[status] || status || "UNKNOWN"}
+    </span>
+  );
+};
+
+const AdminControls = ({
+  filter,
+  onFilterChange,
+  resultCount,
+}) => {
+  return (
+    <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex items-center gap-2">
+        <Filter size={16} className="text-muted" />
+
+        <select
+          value={filter}
+          onChange={(e) => onFilterChange(e.target.value)}
+          className="rounded-lg border border-border bg-background px-3 py-2 text-sm font-body text-ink outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+        >
+          {FILTER_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
       </div>
 
-      {/* =========================
-          PENDING ADMINS
-      ========================= */}
-      <section>
-        <div className="flex items-center gap-2 mb-4">
-          <ShieldCheck
-            size={19}
-            className="text-primary"
-          />
-
-          <h2 className="font-display text-lg font-semibold text-ink">
-            Pending Admins
-          </h2>
-        </div>
-
-        {/* Desktop Table */}
-        <div className="hidden md:block">
-          <AdminTable
-            columns={pendingColumns}
-            data={pendingAdmins}
-            isLoading={false}
-            emptyMessage="No pending admin requests."
-          />
-
-          {pendingAdmins.length > 0 && (
-            <div className="mt-3 bg-surface border border-border rounded-xl overflow-hidden">
-              {pendingAdmins.map((admin) => (
-                <div
-                  key={admin.id}
-                  className="flex items-center justify-end gap-2 px-5 py-3 border-b border-border last:border-0"
-                >
-                  <button
-                    type="button"
-                    disabled={adminAccess.isPending}
-                    onClick={() =>
-                      handleAccessUpdate(
-                        admin,
-                        'ALLOWED'
-                      )
-                    }
-                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-ink text-white text-sm font-body font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                  >
-                    <Check size={15} />
-                    Approve
-                  </button>
-
-                  <button
-                    type="button"
-                    disabled={adminAccess.isPending}
-                    onClick={() =>
-                      handleAccessUpdate(
-                        admin,
-                        'DENIED'
-                      )
-                    }
-                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-border bg-surface text-ink text-sm font-body font-semibold hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition"
-                  >
-                    <X size={15} />
-                    Deny
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Mobile Cards */}
-        <div className="md:hidden space-y-3">
-          {pendingAdmins.length === 0 ? (
-            <div className="bg-surface border border-border rounded-xl p-6 text-center">
-              <p className="text-sm text-muted font-body">
-                No pending admin requests.
-              </p>
-            </div>
-          ) : (
-            pendingAdmins.map((admin) => (
-              <div
-                key={admin.id}
-                className="bg-surface border border-border rounded-xl p-4"
-              >
-                {/* Admin Info */}
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
-                    <ShieldCheck
-                      size={18}
-                      className="text-primary"
-                    />
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-display text-base font-semibold text-ink truncate">
-                      {admin.fullName}
-                    </h3>
-
-                    <p className="text-xs text-muted font-body mt-0.5">
-                      Pending access request
-                    </p>
-                  </div>
-
-                  <span className="shrink-0 text-[11px] font-semibold px-2 py-1 rounded-md border border-border bg-background text-ink">
-                    {admin.adminAccessStatus}
-                  </span>
-                </div>
-
-                {/* Details */}
-                <div className="mt-4 space-y-2.5">
-                  <div className="flex items-center gap-2.5">
-                    <Mail
-                      size={15}
-                      className="text-muted shrink-0"
-                    />
-
-                    <span className="text-sm text-ink font-body truncate">
-                      {admin.email}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2.5">
-                    <Phone
-                      size={15}
-                      className="text-muted shrink-0"
-                    />
-
-                    <span className="text-sm text-ink font-body">
-                      {admin.contactNo || '-'}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2.5">
-                    <CalendarDays
-                      size={15}
-                      className="text-muted shrink-0"
-                    />
-
-                    <span className="text-sm text-ink font-body">
-                      {admin.createdAt
-                        ? new Date(
-                            admin.createdAt
-                          ).toLocaleDateString()
-                        : '-'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="grid grid-cols-2 gap-2 mt-5">
-                  <button
-                    type="button"
-                    disabled={adminAccess.isPending}
-                    onClick={() =>
-                      handleAccessUpdate(
-                        admin,
-                        'ALLOWED'
-                      )
-                    }
-                    className="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-ink text-white text-sm font-body font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                  >
-                    <Check size={15} />
-                    Approve
-                  </button>
-
-                  <button
-                    type="button"
-                    disabled={adminAccess.isPending}
-                    onClick={() =>
-                      handleAccessUpdate(
-                        admin,
-                        'DENIED'
-                      )
-                    }
-                    className="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border border-border bg-surface text-ink text-sm font-body font-semibold hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition"
-                  >
-                    <X size={15} />
-                    Deny
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </section>
-
-      {/* =========================
-          APPROVED ADMINS
-      ========================= */}
-      <section className="mt-10">
-        <div className="flex items-center gap-2 mb-4">
-          <ShieldCheck
-            size={19}
-            className="text-primary"
-          />
-
-          <h2 className="font-display text-lg font-semibold text-ink">
-            Approved Admins
-          </h2>
-        </div>
-
-        {/* Desktop Table */}
-        <div className="hidden md:block">
-          <AdminTable
-            columns={approvedColumns}
-            data={approvedAdmins}
-            isLoading={false}
-            emptyMessage="No approved admins found."
-          />
-        </div>
-
-        {/* Mobile Cards */}
-        <div className="md:hidden space-y-3">
-          {approvedAdmins.length === 0 ? (
-            <div className="bg-surface border border-border rounded-xl p-6 text-center">
-              <p className="text-sm text-muted font-body">
-                No approved admins found.
-              </p>
-            </div>
-          ) : (
-            approvedAdmins.map((admin) => (
-              <div
-                key={admin.id}
-                className="bg-surface border border-border rounded-xl p-4"
-              >
-                {/* Admin Header */}
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
-                    <ShieldCheck
-                      size={18}
-                      className="text-primary"
-                    />
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-display text-base font-semibold text-ink truncate">
-                      {admin.fullName}
-                    </h3>
-
-                    <p className="text-xs text-muted font-body mt-0.5">
-                      Administrator
-                    </p>
-                  </div>
-
-                  <span className="shrink-0 text-[11px] font-semibold px-2 py-1 rounded-md border border-border bg-background text-ink">
-                    {admin.adminAccessStatus}
-                  </span>
-                </div>
-
-                {/* Details */}
-                <div className="mt-4 space-y-2.5">
-                  <div className="flex items-center gap-2.5">
-                    <Mail
-                      size={15}
-                      className="text-muted shrink-0"
-                    />
-
-                    <span className="text-sm text-ink font-body truncate">
-                      {admin.email}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2.5">
-                    <ShieldCheck
-                      size={15}
-                      className="text-muted shrink-0"
-                    />
-
-                    <span className="text-sm text-ink font-body">
-                      Admin Status:{' '}
-                      {admin.adminStatus || '-'}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2.5">
-                    <CalendarDays
-                      size={15}
-                      className="text-muted shrink-0"
-                    />
-
-                    <span className="text-sm text-ink font-body">
-                      {admin.createdAt
-                        ? new Date(
-                            admin.createdAt
-                          ).toLocaleDateString()
-                        : '-'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </section>
+      {typeof resultCount === "number" && (
+        <span className="text-xs font-medium text-muted">
+          {resultCount}{" "}
+          {resultCount === 1 ? "result" : "results"} on this page
+        </span>
+      )}
     </div>
   );
-}
+};
+
+const AdminMobileCard = ({
+  admin,
+  onApprove,
+  onDeny,
+  isUpdating,
+}) => {
+  return (
+    <div className="rounded-xl border border-border bg-surface p-4 transition hover:border-primary/30">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+            {admin.fullName?.charAt(0)?.toUpperCase() || "A"}
+          </div>
+
+          <div className="min-w-0">
+            <h3 className="truncate text-sm font-semibold text-ink">
+              {admin.fullName || "Unnamed Admin"}
+            </h3>
+
+            <p className="truncate text-xs text-muted">
+              {admin.email || "No email"}
+            </p>
+          </div>
+        </div>
+
+        <StatusBadge status={admin.accessStatus} />
+      </div>
+
+      <div className="mt-4 space-y-2.5 border-t border-border pt-3">
+        <div className="flex items-center gap-2 text-sm text-muted">
+          <Phone size={15} className="shrink-0" />
+          <span>
+            {admin.contactNumber || "No contact number"}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 text-sm text-muted">
+          <CalendarDays size={15} className="shrink-0" />
+
+          <span>
+            {admin.createdAt
+              ? new Date(admin.createdAt).toLocaleDateString()
+              : "N/A"}
+          </span>
+        </div>
+      </div>
+
+      {admin.accessStatus === "PENDING" && (
+        <div className="mt-4 flex gap-2">
+          <button
+            type="button"
+            onClick={() => onApprove(admin.id)}
+            disabled={isUpdating}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-500/10 px-3 py-2 text-sm font-medium text-emerald-400 transition hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Check size={16} />
+            Approve
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onDeny(admin.id)}
+            disabled={isUpdating}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-red-500/10 px-3 py-2 text-sm font-medium text-red-400 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <X size={16} />
+            Deny
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const AdminAccessPage = () => {
+  const { email } = useAdminAuthStore();
+
+  const mainAdminEmail = import.meta.env.VITE_MAIN_ADMIN_EMAIL;
+
+  const isMainAdmin =
+    email && mainAdminEmail
+      ? email.toLowerCase() === mainAdminEmail.toLowerCase()
+      : false;
+
+  const [filter, setFilter] = useState("");
+  const [page, setPage] = useState(1);
+
+  const pageSize = 10;
+
+  const {
+    data: admins = [],
+    isLoading,
+    isError,
+  } = useAdminAdmins(
+    {
+      page,
+      size: pageSize,
+      keyword: filter,
+    },
+    isMainAdmin
+  );
+
+  const adminAccessMutation = useAdminAccess();
+
+  const handleFilterChange = (value) => {
+    setFilter(value);
+    setPage(1);
+  };
+
+  const handleApprove = (id) => {
+    adminAccessMutation.mutate({
+      id,
+      status: "ALLOWED",
+    });
+  };
+
+  const handleDeny = (id) => {
+    adminAccessMutation.mutate({
+      id,
+      status: "DENIED",
+    });
+  };
+
+  const canGoPrevious = page > 1;
+  const canGoNext = admins.length === pageSize;
+
+  const handlePrevious = () => {
+    if (canGoPrevious) {
+      setPage((prev) => prev - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (canGoNext) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  if (!isMainAdmin) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-8 text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-500/10">
+            <ShieldCheck
+              size={28}
+              className="text-red-400"
+            />
+          </div>
+
+          <h2 className="mt-4 text-lg font-semibold text-ink">
+            Access Restricted
+          </h2>
+
+          <p className="mt-2 text-sm leading-6 text-muted">
+            Only the Main Administrator can manage
+            administrator access.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const columns = [
+    {
+      key: "admin",
+      label: "Admin",
+      render: (admin) => (
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+            {admin.fullName?.charAt(0)?.toUpperCase() || "A"}
+          </div>
+
+          <div className="min-w-0">
+            <p className="truncate font-medium text-ink">
+              {admin.fullName || "Unnamed Admin"}
+            </p>
+
+            <p className="truncate text-xs text-muted">
+              {admin.email || "No email"}
+            </p>
+          </div>
+        </div>
+      ),
+    },
+
+    {
+      key: "contact",
+      label: "Contact",
+      render: (admin) => (
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-xs text-muted">
+            <Mail size={13} />
+            <span>{admin.email || "N/A"}</span>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs text-muted">
+            <Phone size={13} />
+            <span>{admin.contactNumber || "N/A"}</span>
+          </div>
+        </div>
+      ),
+    },
+
+    {
+      key: "createdAt",
+      label: "Created On",
+      render: (admin) =>
+        admin.createdAt
+          ? new Date(admin.createdAt).toLocaleDateString()
+          : "N/A",
+    },
+
+    {
+      key: "status",
+      label: "Status",
+      render: (admin) => (
+        <StatusBadge status={admin.accessStatus} />
+      ),
+    },
+
+    {
+      key: "actions",
+      label: "Actions",
+      render: (admin) =>
+        admin.accessStatus === "PENDING" ? (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleApprove(admin.id);
+              }}
+              disabled={adminAccessMutation.isPending}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-400 transition hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Check size={14} />
+              Approve
+            </button>
+
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeny(admin.id);
+              }}
+              disabled={adminAccessMutation.isPending}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <X size={14} />
+              Deny
+            </button>
+          </div>
+        ) : (
+          <StatusBadge status={admin.status} />
+        ),
+    },
+  ];
+
+  return (
+    <div className="flex min-h-full flex-col">
+      <div className="flex-1 space-y-6 pb-20">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                <ShieldCheck
+                  size={18}
+                  className="text-primary"
+                />
+              </span>
+
+              <h1 className="text-2xl font-semibold text-ink">
+                Admin Access
+              </h1>
+            </div>
+
+            <p className="mt-1.5 text-sm text-muted">
+              Manage administrator access and approval
+              requests.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2">
+            <Users size={16} className="text-primary" />
+
+            <span className="text-sm font-medium text-ink">
+              Administrators
+            </span>
+          </div>
+        </div>
+
+        <AdminControls
+          filter={filter}
+          onFilterChange={handleFilterChange}
+          resultCount={!isLoading ? admins.length : undefined}
+        />
+
+        {isError && (
+          <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4">
+            <p className="text-sm text-red-400">
+              Failed to load administrators. Please try again.
+            </p>
+          </div>
+        )}
+
+        <div className="hidden md:block">
+          <AdminTable
+            columns={columns}
+            data={admins}
+            isLoading={isLoading}
+            emptyMessage="No administrators found."
+          />
+        </div>
+
+        <div className="space-y-3 md:hidden">
+          {isLoading ? (
+            [1, 2, 3].map((item) => (
+              <div
+                key={item}
+                className="h-44 animate-pulse rounded-xl bg-border/30"
+              />
+            ))
+          ) : admins.length === 0 ? (
+            <div className="rounded-xl border border-border bg-surface p-10 text-center">
+              <p className="text-sm text-muted">
+                No administrators found.
+              </p>
+            </div>
+          ) : (
+            admins.map((admin) => (
+              <AdminMobileCard
+                key={admin.id}
+                admin={admin}
+                onApprove={handleApprove}
+                onDeny={handleDeny}
+                isUpdating={adminAccessMutation.isPending}
+              />
+            ))
+          )}
+        </div>
+      </div>
+
+      {!isLoading && admins.length > 0 && (
+        <div className="sticky bottom-0 left-0 right-0 -mx-4 mt-4 border-t border-border bg-surface/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-surface/80 sm:mx-0 sm:rounded-xl sm:border">
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={handlePrevious}
+              disabled={!canGoPrevious}
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium text-ink transition hover:bg-background disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <ChevronLeft size={16} />
+
+              <span className="hidden sm:inline">
+                Previous
+              </span>
+            </button>
+
+            <span className="text-sm font-medium text-muted">
+              Page {page}
+            </span>
+
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={!canGoNext}
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium text-ink transition hover:bg-background disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <span className="hidden sm:inline">
+                Next
+              </span>
+
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default AdminAccessPage;

@@ -8,6 +8,7 @@ export const ENDPOINTS = {
     editProfile: "/auth/edit-profile",
     refreshToken: "/auth/refresh-token",
   },
+
   gig: {
     becomeGig: "/gig/become-gig",
     myProfile: "/gig/profile",
@@ -18,9 +19,10 @@ export const ENDPOINTS = {
     proposalById: (id) => `/gig/proposal/${id}`, // PATCH update
     withdrawProposal: (id) => `/gig/withdraw-proposal/${id}`,
   },
+
   jobs: {
     create: "/job/job",
-    delete: "/job/job", // DELETE with ?jobId=
+    delete: "/job/job", // DELETE with ?jobId=*
     draft: "/job/draft",
     drafts: "/job/drafts",
     draftById: (id) => `/job/draft/${id}`,
@@ -33,6 +35,7 @@ export const ENDPOINTS = {
     shortlistProposal: "/job/shortlist-proposal",
     withdrawProposalByJobId: (jobId) => `/job/withdraw-proposal/${jobId}`,
   },
+
   contracts: {
     list: "/contract/contracts",
     byId: (id) => `/contract/contract/${id}`,
@@ -41,58 +44,60 @@ export const ENDPOINTS = {
     activate: (id) => `/contract/active-contract/${id}`,
     breakContract: (id) => `/contract/break-contract/${id}`,
   },
+
   chat: {
     messages: (conversationId) => `/conversations/${conversationId}/messages`,
     start: (jobApplicationId) => `/conversations/start/${jobApplicationId}`,
   },
+
   skills: {
     add: "/skills/add-skill",
     list: "/skills/skills",
     byId: (id) => `/skills/skill/${id}`,
     search: "/skills/search",
   },
+
   bookmarks: {
     save: "/bookmark/bookmark",
-    remove: "/bookmark/bookmark", // DELETE with ?jobId=
+    remove: "/bookmark/bookmark", // DELETE with ?jobId=*
     list: "/bookmark/bookmarks",
   },
+
   reviews: {
     byContractId: (id) => `/review/review/${id}`, // POST/PATCH/DELETE
     list: "/review/reviews",
   },
+
   reports: {
     create: "/report/report",
   },
+
   technicalSupport: {
     create: "/technical-support/technical-support",
     list: "/technical-support/technical-supports",
     byId: (id) => `/technical-support/technical-support/${id}`,
   },
+
   admin: {
     register: "/admin/register",
     login: "/admin/login",
-
     stats: "/admin/stats",
     growthChart: "/admin/growth-chart",
     popularJob: "/admin/popular-job",
-
     reports: "/admin/reports",
     report: "/admin/report",
-
     jobs: "/admin/jobs",
     job: "/admin/job",
-
     jobApplications: "/admin/job-applications",
     jobApplication: "/admin/job-application",
-
     gigs: "/admin/gigs",
     gig: "/admin/gig",
-
     clients: "/admin/clients",
     client: "/admin/client",
 
+    // Admin Access
+    admins: "/admin/admins",
     adminAccess: "/admin/admin-access",
-
     technicalSupports: "/admin/technical-supports",
     technicalSupport: "/admin/technical-support",
   },

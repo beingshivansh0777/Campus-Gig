@@ -1,13 +1,17 @@
 import adminAxiosInstance from '../../api/adminAxiosInstance';
+
 import { ENDPOINTS } from '../../api/endpoints';
 
 export const adminApi = {
+  // Register
   register: (payload) =>
     adminAxiosInstance.post(ENDPOINTS.admin.register, payload),
 
+  // Login
   login: (payload) =>
     adminAxiosInstance.post(ENDPOINTS.admin.login, payload),
 
+  // Send Mail
   sendMail: (payload) =>
     adminAxiosInstance.post(ENDPOINTS.admin.mail, payload),
 
@@ -67,6 +71,11 @@ export const adminApi = {
     }),
 
   // Admin Access
+  admins: (params) =>
+    adminAxiosInstance.get(ENDPOINTS.admin.admins, {
+      params,
+    }),
+
   adminAccess: (id, status) =>
     adminAxiosInstance.patch(ENDPOINTS.admin.adminAccess, null, {
       params: {
