@@ -86,6 +86,7 @@ export const ENDPOINTS = {
     popularJob: "/admin/popular-job",
     reports: "/admin/reports",
     report: "/admin/report",
+    updateReport: (id) => `/admin/${id}/update-report`,
     jobs: "/admin/jobs",
     job: "/admin/job",
     jobApplications: "/admin/job-applications",

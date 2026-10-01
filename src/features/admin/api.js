@@ -1,6 +1,6 @@
-import adminAxiosInstance from '../../api/adminAxiosInstance';
+import adminAxiosInstance from "../../api/adminAxiosInstance";
 
-import { ENDPOINTS } from '../../api/endpoints';
+import { ENDPOINTS } from "../../api/endpoints";
 
 export const adminApi = {
   // Register
@@ -8,16 +8,13 @@ export const adminApi = {
     adminAxiosInstance.post(ENDPOINTS.admin.register, payload),
 
   // Login
-  login: (payload) =>
-    adminAxiosInstance.post(ENDPOINTS.admin.login, payload),
+  login: (payload) => adminAxiosInstance.post(ENDPOINTS.admin.login, payload),
 
   // Send Mail
-  sendMail: (payload) =>
-    adminAxiosInstance.post(ENDPOINTS.admin.mail, payload),
+  sendMail: (payload) => adminAxiosInstance.post(ENDPOINTS.admin.mail, payload),
 
   // Dashboard
-  stats: (params) =>
-    adminAxiosInstance.get(ENDPOINTS.admin.stats, { params }),
+  stats: (params) => adminAxiosInstance.get(ENDPOINTS.admin.stats, { params }),
 
   growthChart: (params) =>
     adminAxiosInstance.get(ENDPOINTS.admin.growthChart, { params }),
@@ -26,6 +23,7 @@ export const adminApi = {
     adminAxiosInstance.get(ENDPOINTS.admin.popularJob, { params }),
 
   // Reports
+
   reports: (params) =>
     adminAxiosInstance.get(ENDPOINTS.admin.reports, { params }),
 
@@ -33,10 +31,16 @@ export const adminApi = {
     adminAxiosInstance.get(ENDPOINTS.admin.report, {
       params: { id },
     }),
+    
+  updateReport: (id, status) =>
+    adminAxiosInstance.patch(ENDPOINTS.admin.updateReport(id), null, {
+      params: {
+        status,
+      },
+    }),
 
   // Jobs
-  jobs: (params) =>
-    adminAxiosInstance.get(ENDPOINTS.admin.jobs, { params }),
+  jobs: (params) => adminAxiosInstance.get(ENDPOINTS.admin.jobs, { params }),
 
   job: (id) =>
     adminAxiosInstance.get(ENDPOINTS.admin.job, {
@@ -53,8 +57,7 @@ export const adminApi = {
     }),
 
   // Gigs
-  gigs: (params) =>
-    adminAxiosInstance.get(ENDPOINTS.admin.gigs, { params }),
+  gigs: (params) => adminAxiosInstance.get(ENDPOINTS.admin.gigs, { params }),
 
   gig: (id) =>
     adminAxiosInstance.get(ENDPOINTS.admin.gig, {
@@ -96,14 +99,10 @@ export const adminApi = {
     }),
 
   updateTechnicalSupport: (id, status) =>
-    adminAxiosInstance.patch(
-      ENDPOINTS.admin.technicalSupport,
-      null,
-      {
-        params: {
-          id,
-          status,
-        },
-      }
-    ),
+    adminAxiosInstance.patch(ENDPOINTS.admin.technicalSupport, null, {
+      params: {
+        id,
+        status,
+      },
+    }),
 };
