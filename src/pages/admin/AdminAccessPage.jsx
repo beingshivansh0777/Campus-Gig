@@ -444,7 +444,7 @@ const AdminAccessPage = () => {
       </div>
 
       {!isLoading && admins.length > 0 && (
-        <div className="sticky bottom-0 left-0 right-0 -mx-4 mt-4 border-t border-border bg-surface/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-surface/80 sm:mx-0 sm:rounded-xl sm:border">
+        <div className="sticky bottom-0 left-0 right-0 -mx-4 mt-4 border-t border-border bg-surface/95 px-4 py-3 backdrop-blur supports-backdrop-filter:bg-surface/80 sm:mx-0 sm:rounded-xl sm:border">
           <div className="flex items-center justify-between">
             <button
               type="button"
