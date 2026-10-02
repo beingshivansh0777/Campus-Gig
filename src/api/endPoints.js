@@ -2,10 +2,11 @@ export const ENDPOINTS = {
   auth: {
     signup: "/auth/sign-up",
     login: "/auth/login",
-    verifyOtp: "/auth/verification", // GET to request, PATCH to confirm
-    forgotPasswordOtp: "/auth/forgot-password", // GET to request, PATCH to confirm
+    verifyOtp: "/auth/verification",
+    forgotPasswordOtp: "/auth/forgot-password",
     profile: "/auth/profile",
     editProfile: "/auth/edit-profile",
+    resetPassword: "/auth/reset-password",
     refreshToken: "/auth/refresh-token",
   },
 

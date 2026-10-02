@@ -8,6 +8,7 @@ import ReviewsList from "../features/reviews/components/ReviewsList";
 import { useReviews } from "../features/reviews/hooks/useReviews";
 import ReportsList from "../features/reports/components/ReportsList";
 import { useMyReports } from "../features/reports/hooks/useMyReports";
+import ResetPasswordForm from "../features/auth/components/ResetPasswordForm";
 
 function ProfilePage() {
   const isGig = useAuthStore((state) => state.isGig);
@@ -15,8 +16,8 @@ function ProfilePage() {
   const { data: reviews, isLoading: reviewsLoading } = useReviews();
   const { data: reports, isLoading: reportsLoading } = useMyReports();
   const tabs = isGig
-    ? ["view", "edit", "gig-profile", "reviews", "reports"]
-    : ["view", "edit", "become-gig", "reviews", "reports"];
+    ? ["view", "edit", "gig-profile", "reviews", "reports", "reset-password"]
+    : ["view", "edit", "become-gig", "reviews", "reports", "reset-password"];
   const tabLabels = {
     view: "Overview",
     edit: "Edit Details",
@@ -24,6 +25,7 @@ function ProfilePage() {
     "gig-profile": "My Gig Profile",
     reviews: "Reviews",
     reports: "Reports",
+    "reset-password": "Reset Password",
   };
 
   return (
@@ -76,6 +78,11 @@ function ProfilePage() {
 
           {tab === "reports" && (
             <ReportsList reports={reports} isLoading={reportsLoading} />
+          )}
+          {tab === "reset-password" && (
+            <div className="bg-surface border border-border rounded-xl p-6">
+              <ResetPasswordForm />
+            </div>
           )}
         </div>
       </div>

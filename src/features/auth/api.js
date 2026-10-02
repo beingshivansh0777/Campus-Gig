@@ -1,5 +1,5 @@
-import axiosInstance from '../../api/axiosInstance';
-import { ENDPOINTS } from '../../api/endpoints';
+import axiosInstance from "../../api/axiosInstance";
+import { ENDPOINTS } from "../../api/endpoints";
 
 export const authApi = {
   signup: (payload) => axiosInstance.post(ENDPOINTS.auth.signup, payload),
@@ -14,12 +14,11 @@ export const authApi = {
   sendForgotPasswordOtp: (email) =>
     axiosInstance.get(ENDPOINTS.auth.forgotPasswordOtp, { params: { email } }),
 
-  resetPassword: (email, otp, newPassword) =>
-    axiosInstance.patch(ENDPOINTS.auth.forgotPasswordOtp, null, {
-      params: { email, otp, newPassword },
-    }),
+  resetPassword: (payload) =>
+    axiosInstance.patch(ENDPOINTS.auth.resetPassword, payload),
 
   getProfile: () => axiosInstance.get(ENDPOINTS.auth.profile),
 
-  editProfile: (payload) => axiosInstance.patch(ENDPOINTS.auth.editProfile, payload),
+  editProfile: (payload) =>
+    axiosInstance.patch(ENDPOINTS.auth.editProfile, payload),
 };

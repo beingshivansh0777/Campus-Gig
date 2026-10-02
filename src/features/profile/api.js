@@ -1,6 +1,11 @@
 import axiosInstance from "../../api/axiosInstance";
 import { ENDPOINTS } from "../../api/endpoints";
 
+export const authApi = {
+  resetPassword: (payload) =>
+    axiosInstance.patch(ENDPOINTS.auth.resetPassword, payload),
+};
+
 export const profileApi = {
   getProfile: () => axiosInstance.get(ENDPOINTS.auth.profile),
   editProfile: (payload) =>
@@ -20,4 +25,4 @@ export const skillsApi = {
     axiosInstance.post(ENDPOINTS.skills.add, null, {
       params: { skill: skillName },
     }),
-};
+}
