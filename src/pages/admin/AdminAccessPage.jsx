@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import {
   Check,
   ShieldCheck,
@@ -8,18 +7,13 @@ import {
   Phone,
   CalendarDays,
   Filter,
-  ChevronLeft,
-  ChevronRight,
   Users,
 } from "lucide-react";
-
 import AdminTable from "../../features/admin/components/AdminTable";
-
 import {
   useAdminAccess,
   useAdminAdmins,
 } from "../../features/admin/hooks/useAdminAuth";
-
 import { useAdminAuthStore } from "../../features/admin/adminAuthStore";
 
 const FILTER_OPTIONS = [
@@ -333,7 +327,15 @@ const AdminAccessPage = () => {
             </button>
           </div>
         ) : (
-          <StatusBadge status={admin.status} />
+          <span
+            className={`inline-flex items-center rounded-lg border px-3 py-1.5 text-xs font-medium ${
+              admin.accessStatus === "ALLOWED"
+                ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+                : "border-red-500/20 bg-red-500/10 text-red-400"
+            }`}
+          >
+            {admin.accessStatus === "ALLOWED" ? "ACTIVE" : "INACTIVE"}
+          </span>
         ),
     },
   ];
@@ -358,7 +360,6 @@ const AdminAccessPage = () => {
 
           <div className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2">
             <Users size={16} className="text-primary" />
-
             <span className="text-sm font-medium text-ink">Administrators</span>
           </div>
         </div>
