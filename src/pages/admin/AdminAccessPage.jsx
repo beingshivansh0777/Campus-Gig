@@ -37,12 +37,9 @@ const STATUS_DOT = {
 
 const StatusBadge = ({ status }) => {
   const styles = {
-    ALLOWED:
-      "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    PENDING:
-      "bg-amber-500/10 text-amber-400 border-amber-500/20",
-    DENIED:
-      "bg-red-500/10 text-red-400 border-red-500/20",
+    ALLOWED: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    PENDING: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    DENIED: "bg-red-500/10 text-red-400 border-red-500/20",
   };
 
   const labels = {
@@ -68,11 +65,7 @@ const StatusBadge = ({ status }) => {
   );
 };
 
-const AdminControls = ({
-  filter,
-  onFilterChange,
-  resultCount,
-}) => {
+const AdminControls = ({ filter, onFilterChange, resultCount }) => {
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-2">
@@ -93,20 +86,14 @@ const AdminControls = ({
 
       {typeof resultCount === "number" && (
         <span className="text-xs font-medium text-muted">
-          {resultCount}{" "}
-          {resultCount === 1 ? "result" : "results"} on this page
+          {resultCount} {resultCount === 1 ? "result" : "results"} on this page
         </span>
       )}
     </div>
   );
 };
 
-const AdminMobileCard = ({
-  admin,
-  onApprove,
-  onDeny,
-  isUpdating,
-}) => {
+const AdminMobileCard = ({ admin, onApprove, onDeny, isUpdating }) => {
   return (
     <div className="rounded-xl border border-border bg-surface p-4 transition hover:border-primary/30">
       <div className="flex items-start justify-between gap-3">
@@ -132,9 +119,7 @@ const AdminMobileCard = ({
       <div className="mt-4 space-y-2.5 border-t border-border pt-3">
         <div className="flex items-center gap-2 text-sm text-muted">
           <Phone size={15} className="shrink-0" />
-          <span>
-            {admin.contactNumber || "No contact number"}
-          </span>
+          <span>{admin.contactNumber || "No contact number"}</span>
         </div>
 
         <div className="flex items-center gap-2 text-sm text-muted">
@@ -200,7 +185,7 @@ const AdminAccessPage = () => {
       size: pageSize,
       keyword: filter,
     },
-    isMainAdmin
+    isMainAdmin,
   );
 
   const adminAccessMutation = useAdminAccess();
@@ -244,10 +229,7 @@ const AdminAccessPage = () => {
       <div className="flex min-h-[60vh] items-center justify-center">
         <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-8 text-center">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-500/10">
-            <ShieldCheck
-              size={28}
-              className="text-red-400"
-            />
+            <ShieldCheck size={28} className="text-red-400" />
           </div>
 
           <h2 className="mt-4 text-lg font-semibold text-ink">
@@ -255,8 +237,7 @@ const AdminAccessPage = () => {
           </h2>
 
           <p className="mt-2 text-sm leading-6 text-muted">
-            Only the Main Administrator can manage
-            administrator access.
+            Only the Main Administrator can manage administrator access.
           </p>
         </div>
       </div>
@@ -316,9 +297,7 @@ const AdminAccessPage = () => {
     {
       key: "status",
       label: "Status",
-      render: (admin) => (
-        <StatusBadge status={admin.accessStatus} />
-      ),
+      render: (admin) => <StatusBadge status={admin.accessStatus} />,
     },
 
     {
@@ -366,29 +345,21 @@ const AdminAccessPage = () => {
           <div>
             <div className="flex items-center gap-2">
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
-                <ShieldCheck
-                  size={18}
-                  className="text-primary"
-                />
+                <ShieldCheck size={18} className="text-primary" />
               </span>
 
-              <h1 className="text-2xl font-semibold text-ink">
-                Admin Access
-              </h1>
+              <h1 className="text-2xl font-semibold text-ink">Admin Access</h1>
             </div>
 
             <p className="mt-1.5 text-sm text-muted">
-              Manage administrator access and approval
-              requests.
+              Manage administrator access and approval requests.
             </p>
           </div>
 
           <div className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2">
             <Users size={16} className="text-primary" />
 
-            <span className="text-sm font-medium text-ink">
-              Administrators
-            </span>
+            <span className="text-sm font-medium text-ink">Administrators</span>
           </div>
         </div>
 
@@ -425,9 +396,7 @@ const AdminAccessPage = () => {
             ))
           ) : admins.length === 0 ? (
             <div className="rounded-xl border border-border bg-surface p-10 text-center">
-              <p className="text-sm text-muted">
-                No administrators found.
-              </p>
+              <p className="text-sm text-muted">No administrators found.</p>
             </div>
           ) : (
             admins.map((admin) => (
@@ -444,36 +413,26 @@ const AdminAccessPage = () => {
       </div>
 
       {!isLoading && admins.length > 0 && (
-        <div className="sticky bottom-0 left-0 right-0 -mx-4 mt-4 border-t border-border bg-surface/95 px-4 py-3 backdrop-blur supports-backdrop-filter:bg-surface/80 sm:mx-0 sm:rounded-xl sm:border">
-          <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-5">
+          <p className="text-sm text-muted font-body">Page {page}</p>
+
+          <div className="flex gap-2">
             <button
               type="button"
-              onClick={handlePrevious}
               disabled={!canGoPrevious}
-              className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium text-ink transition hover:bg-background disabled:cursor-not-allowed disabled:opacity-40"
+              onClick={handlePrevious}
+              className="px-4 py-2 border border-border rounded-lg bg-surface text-sm font-body text-ink hover:bg-background disabled:opacity-40 disabled:cursor-not-allowed transition"
             >
-              <ChevronLeft size={16} />
-
-              <span className="hidden sm:inline">
-                Previous
-              </span>
+              Previous
             </button>
 
-            <span className="text-sm font-medium text-muted">
-              Page {page}
-            </span>
-
             <button
               type="button"
-              onClick={handleNext}
               disabled={!canGoNext}
-              className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium text-ink transition hover:bg-background disabled:cursor-not-allowed disabled:opacity-40"
+              onClick={handleNext}
+              className="px-4 py-2 border border-border rounded-lg bg-surface text-sm font-body text-ink hover:bg-background disabled:opacity-40 disabled:cursor-not-allowed transition"
             >
-              <span className="hidden sm:inline">
-                Next
-              </span>
-
-              <ChevronRight size={16} />
+              Next
             </button>
           </div>
         </div>
