@@ -18,7 +18,7 @@ export const useRequestOtp = () => {
 export const useResetPassword = () => {
   return useMutation({
     mutationFn: ({ email, otp, newPassword }) =>
-      authApi.resetPassword(email, otp, newPassword),
+  authApi.forgotPassword(email, otp, newPassword),
     onSuccess: () => {
       toast.success('Password changed successfully. Please log in.');
     },

@@ -12,7 +12,18 @@ export const authApi = {
     axiosInstance.patch(ENDPOINTS.auth.verifyOtp, null, { params: { otp } }),
 
   sendForgotPasswordOtp: (email) =>
-    axiosInstance.get(ENDPOINTS.auth.forgotPasswordOtp, { params: { email } }),
+    axiosInstance.get(ENDPOINTS.auth.forgotPasswordOtp, {
+      params: { email },
+    }),
+
+  forgotPassword: (email, otp, newPassword) =>
+    axiosInstance.patch(ENDPOINTS.auth.forgotPassword, null, {
+      params: {
+        email,
+        otp,
+        newPassword,
+      },
+    }),
 
   resetPassword: (payload) =>
     axiosInstance.patch(ENDPOINTS.auth.resetPassword, payload),
